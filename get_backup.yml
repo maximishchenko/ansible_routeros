@@ -1,0 +1,41 @@
+---
+- hosts: ALL_RouterOS
+  connection: network_cli
+  gather_facts: false
+  vars:
+    out_root: "{{ out_root_dir | default('../out') }}"
+    export_dir: "dump"
+    group_name_dir: "{{ group_dir | default('ungrouped') }}"
+    retention: "{{ retention_days | default('7d') }}"
+  tasks:
+    - name: Set export dir
+      ansible.builtin.set_fact:
+        out_folder_name: "{{ out_root }}/{{ export_dir }}/{{ group_name_dir }}"
+      delegate_to: localhost
+
+    - name: Set local storage retention policy
+      ansible.builtin.set_fact:
+        retention_policy: "{{ retention }}"
+      delegate_to: localhost
+
+- name: Get identity from RouterOS device
+  import_playbook: backup/00-get-routeros-identity.yml
+
+- name: Get identity string
+  import_playbook: backup/01-get-identity-string.yml
+
+- name: Create out dir if not exists
+  import_playbook: backup/02-create-out-dir.yml
+
+- name: Get export file
+  import_playbook: backup/03-get-backup-file.yml
+
+- name: Send backup file to Telegram
+  import_playbook: backup/04-send-backup-file-to-telegram.yml
+
+- name: Remove file from RouterOS device
+  import_playbook: backup/05-remove-file-from-routeros-device.yml
+
+- name: Clean local backups with backup retention policy
+  import_playbook: backup/06-clean-local-backups-with-retention-policy.yml
+

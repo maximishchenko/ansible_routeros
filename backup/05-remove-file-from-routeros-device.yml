@@ -1,0 +1,10 @@
+---
+- hosts: ALL_RouterOS
+  connection: network_cli
+  gather_facts: false
+  tasks:
+    - name: Remove file from RouterOS Device
+      routeros_command:
+        commands: 
+          - /file remove {{ identity }}.rsc
+      when: identity is defined and identity | length > 0
