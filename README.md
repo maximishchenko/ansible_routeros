@@ -63,3 +63,32 @@ ansible-playbook backup/main.yml --extra-vars "action=backup"
 ```shell
 ansible-playbook backup/main.yml --extra-vars "action=export"
 ```
+
+5. Vault encryption
+
+You can encrypt `group_vars` files with ansible-vault
+
+Create file with encryption password. For example .vaultpass (exists at .gitignore)
+
+```shell
+echo "myverysecurestring" > .vaultpass
+```
+
+Set file permission
+
+
+```shell
+chmod 600 .vaultpass
+```
+
+Encrypt `group_vars` file with password stored inside .vaultpass
+
+```shell
+ansible-vault encrypt group_vars/GroupName --vault-password-file=.vaultpass
+```
+
+For run playbook you must set --vault-password-file=.vaultpass
+
+```shell
+ansible-playbook backup/main.yml --extra-args action=export --vault-password-file=.vaultpass
+```
