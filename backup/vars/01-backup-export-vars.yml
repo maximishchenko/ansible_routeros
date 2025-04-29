@@ -1,3 +1,2 @@
 out_root: "{{ out_root_dir | default('../out') }}"
 group_name_dir: "{{ group_dir | default('ungrouped') }}"
-retention: "{{ retention_days | default('7d') }}"

@@ -2,6 +2,8 @@
 - hosts: ALL_RouterOS
   connection: network_cli
   gather_facts: false
+  vars_files:
+    - "./vars/02-retention.yml"
   tasks:
     - name: Search backups older than backup retention days
       find:
@@ -9,7 +11,7 @@
         age: "{{ retention_policy }}"
       register: backups_to_clear
       when: retention_policy is defined and retention_policy | length > 0
-
+    
     - name: Removing older backups
       file:
         path: "{{ item.path }}"

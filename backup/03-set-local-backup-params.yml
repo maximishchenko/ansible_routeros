@@ -1,0 +1,29 @@
+---
+- hosts: ALL_RouterOS
+  connection: network_cli
+  gather_facts: false
+  tasks:
+    - name: Create out dir if not exists
+      ansible.builtin.file:
+        path: "{{ out_folder_name }}"
+        state: directory
+      delegate_to: localhost
+      when: out_folder_name is defined and out_folder_name | length > 0
+      become: false
+
+    # TODO one action except any
+    - name: Set backup extension
+      ansible.builtin.set_fact:
+        backup_extension: "rsc"
+      when: action == "export"
+    
+    - name: Set backup extension
+      ansible.builtin.set_fact:
+        backup_extension: "backup"
+      when: action == "backup"
+    
+    - name: Get full export path
+      ansible.builtin.set_fact:
+        full_export_path: "{{ out_folder_name }}/{{ current_datetime }}-{{ identity }}-{{ inventory_hostname }}.{{ backup_extension }}"
+      delegate_to: localhost
+      when: out_folder_name is defined and out_folder_name | length > 0
