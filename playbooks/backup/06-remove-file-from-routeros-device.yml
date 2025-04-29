@@ -3,7 +3,7 @@
   connection: network_cli
   gather_facts: false
   vars_files:
-    - "./vars/02-{{ action }}-action-defaults.yml"
+    - "./vars/02-{{ type }}-action-defaults.yml"
   tasks:
     - name: Remove file from RouterOS Device
       routeros_command:

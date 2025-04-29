@@ -3,7 +3,7 @@
   connection: network_cli
   gather_facts: false
   tasks:
-    - name: Validate variable 'action'
+    - name: Validate variable 'type'
       fail:
         msg: "Invalid action! Allowed values: export, backup"
-      when: action not in ['export', 'backup']
+      when: type not in ['export', 'backup']

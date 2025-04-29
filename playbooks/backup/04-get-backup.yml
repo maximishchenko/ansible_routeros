@@ -3,19 +3,19 @@
   connection: network_cli
   gather_facts: false
   vars_files:
-    - "./vars/02-{{ action }}-action-defaults.yml"
+    - "./vars/02-{{ type }}-action-defaults.yml"
   tasks:
     - name: Create full binary backup dump on RouterOS Device
       routeros_command:
         commands:
           - /system backup save name={{ identity }} password={{ identity }}
-      when: action == "backup"
+      when: type == "backup"
 
     - name: Create export on RouterOS Device
       routeros_command:
         commands:
           - /export show-sensitive terse file={{ identity }}
-      when: action == "export"
+      when: type == "export"
     
     - name: Get export file
       ansible.netcommon.net_get:
