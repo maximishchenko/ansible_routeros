@@ -3,18 +3,21 @@
   connection: network_cli
   gather_facts: false
   vars_files:
+    - "./vars/01-group-defaults.yml"
     - "./vars/02-{{ type }}-action-defaults.yml"
+
   tasks:
+
     - name: Create full binary backup dump on RouterOS Device
       routeros_command:
         commands:
-          - /system backup save name={{ identity }} password={{ identity }}
+          - /system backup save name={{ identity }}
       when: type == "backup"
 
     - name: Create export on RouterOS Device
       routeros_command:
         commands:
-          - /export show-sensitive terse file={{ identity }}
+          - /export  {% if export_is_sensitive | default(false) %}show-sensitive terse{% endif %} file={{ identity }}
       when: type == "export"
     
     - name: Get export file

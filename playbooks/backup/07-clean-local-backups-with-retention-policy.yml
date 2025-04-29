@@ -4,7 +4,9 @@
   gather_facts: false
   vars_files:
     - "./vars/01-group-defaults.yml"
+
   tasks:
+
     - name: Search backups older than backup retention days
       find:
         paths: "{{ out_folder_name }}"

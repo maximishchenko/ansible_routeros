@@ -2,7 +2,9 @@
 - hosts: ALL_RouterOS
   connection: network_cli
   gather_facts: false
+
   tasks:
+
     - name: Get identity from RouterOS device
       routeros_command:
         commands: /system identity print

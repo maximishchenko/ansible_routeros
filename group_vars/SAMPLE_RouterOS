@@ -6,3 +6,4 @@ telegram_message_thread_id: message_thread_id # Telegram message thread ID (topi
 out_root_dir: ../out # Backups and exports root storage, optional. If missing, ../out will be used.
 group_dir: Contoso # Subfolder inside out_root_dir, optional. Can be used for grouping. If missing, "ungrouped" will be used
 retention_days: 3d # Backup archive retention, optional. If missing, 7d will be used
+export_show_sensitive: false # Show/hide private information in export file, optional. Defualt - false

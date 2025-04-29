@@ -2,7 +2,9 @@
 - hosts: ALL_RouterOS
   connection: network_cli
   gather_facts: false
+
   tasks:
+
     - name: Send backup file to Telegram
       ansible.builtin.command: >
         curl -s -X POST "https://api.telegram.org/bot{{ telegram_bot_token }}/sendDocument"

@@ -5,7 +5,9 @@
   vars_files:
     - "./vars/01-group-defaults.yml"
     - "./vars/02-{{ type }}-action-defaults.yml"
+
   tasks:
+
     - name: Get out_folder_name
       ansible.builtin.set_fact:
         out_folder_name: "{{ out_root }}/{{ export_dir }}/{{ group_name_dir }}"
