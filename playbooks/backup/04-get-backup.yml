@@ -11,13 +11,14 @@
     - name: Create full binary backup dump on RouterOS Device
       routeros_command:
         commands:
-          - /system backup save name={{ identity }}
+          # - /system backup save name={{ identity }}
+          - /system backup save {% if not backup_is_encrypted and backup_password is not defined %} dont-encrypt=yes {% endif %} {% if backup_password is defined %} password={{ backup_password }} {% endif %} name={{ identity }}
       when: type == "backup"
 
     - name: Create export on RouterOS Device
       routeros_command:
         commands:
-          - /export  {% if export_is_sensitive | default(false) %}show-sensitive terse{% endif %} file={{ identity }}
+          - /export  {% if export_is_sensitive %}show-sensitive terse{% endif %} file={{ identity }}
       when: type == "export"
     
     - name: Get export file

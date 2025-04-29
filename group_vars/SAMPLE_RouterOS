@@ -7,3 +7,5 @@ out_root_dir: ../out # Backups and exports root storage, optional. If missing, .
 group_dir: Contoso # Subfolder inside out_root_dir, optional. Can be used for grouping. If missing, "ungrouped" will be used
 retention_days: 3d # Backup archive retention, optional. If missing, 7d will be used
 export_show_sensitive: false # Show/hide private information in export file, optional. Defualt - false
+backup_encryption: true # Is binary backup encrypted, optional. Default - true
+backup_password: this_is_my_very_secure_backup_encryption_password # binary backup encryption password, optional. If missing use current user password. If password exists - backup_encryption will be ignored
