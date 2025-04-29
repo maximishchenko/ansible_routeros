@@ -1,8 +1,8 @@
 ansible_ssh_user: user_name # RouterOS username for ansible, required
 ansible_ssh_password: this_is_my_very_secure_password_with_full_rights # RouterOS password for ansible, required
 telegram_chat_id: group_chat_id # Telegram Group Chat ID, required
-telegram_message_thread_id: message_thread_id # Telegram message thread ID (topic), required
 telegram_bot_token: bot_token_here # Telegram Bot API Token, required
+telegram_message_thread_id: message_thread_id # Telegram message thread ID (topic), optional
 out_root_dir: ../out # Backups and exports root storage, optional. If missing, ../out will be used.
 group_dir: Contoso # Subfolder inside out_root_dir, optional. Can be used for grouping. If missing, "ungrouped" will be used
 retention_days: 3d # Backup archive retention, optional. If missing, 7d will be used

@@ -7,6 +7,6 @@
       ansible.builtin.command: >
         curl -s -X POST "https://api.telegram.org/bot{{ telegram_bot_token }}/sendDocument"
         -F chat_id="{{ telegram_chat_id }}"
-        -F message_thread_id="{{ telegram_message_thread_id }}"
+        {% if telegram_message_thread_id is defined %}-F message_thread_id="{{ telegram_message_thread_id }}"{% endif %}
         -F document=@"{{ full_export_path }}"
       delegate_to: localhost

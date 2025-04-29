@@ -1,4 +1,3 @@
-* Telegram message_thread_id is optional
 * Send backups to Email
 * Store in git repo (only for rsc export files)
 * /export show sensitivity from settings
