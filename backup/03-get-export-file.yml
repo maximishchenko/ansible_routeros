@@ -11,8 +11,7 @@
     - name: Create export on RouterOS Device
       routeros_command:
         commands:
-          - /export file={{ identity }}
-          #- /system backup save name={{ identity }}
+          - /export show-sensitive terse file={{ identity }}
 
     - name: Get full export path
       ansible.builtin.set_fact:
