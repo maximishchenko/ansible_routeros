@@ -30,14 +30,28 @@ touch group_vars/GroupName
 
 > Read `group_vars/SAMPLE_RouterOS` and add group information into group file
 
-4. Run export playbook:
+4. Run export playbook with entrypoints:
 
 ```shell
-ansible-playbook get-export.yml
+ansible-playbook get_export_config.yml
 ```
 
 5. Run backup playbook:
 
 ```shell
-ansible-playbook get-backup.yml
+ansible-playbook get_binary_dump.yml
+```
+
+5. You are always run `backup/main.yml` playbook directly ans pass them extra variable "action" with value from range: export or backup
+
+> Full binary backup
+
+```shell
+ansible-playbook backup/main.yml --extra-vars "action=backup"
+```
+
+> Export config
+
+```shell
+ansible-playbook backup/main.yml --extra-vars "action=export"
 ```

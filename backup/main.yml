@@ -1,4 +1,7 @@
 ---
+- name: Validate 'action' variable
+  import_playbook: 00-validate-action-value.yml
+
 - name: Get identity from RouterOS device
   import_playbook: 01-get-routeros-identity.yml
 
@@ -10,8 +13,6 @@
 
 - name: Get export file
   import_playbook: 04-get-backup.yml
-  vars:
-    action: "{{ action }}"
 
 - name: Send backup file to Telegram
   import_playbook: 05-send-backup-file-to-telegram.yml
