@@ -2,11 +2,9 @@
 - hosts: ALL_RouterOS
   connection: network_cli
   gather_facts: false
-  vars:
-    out_root: "{{ out_root_dir | default('../out') }}"
-    export_dir: "export"
-    group_name_dir: "{{ group_dir | default('ungrouped') }}"
-    retention: "{{ retention_days | default('7d') }}"
+  vars_files:
+    - "backup/vars/00-export-vars.yml"
+    - "backup/vars/01-backup-export-vars.yml"
   tasks:
     - name: Set export dir
       ansible.builtin.set_fact:
