@@ -30,19 +30,27 @@ touch group_vars/GroupName
 
 > Read `group_vars/SAMPLE_RouterOS` and add group information into group file
 
-4. Run export playbook with entrypoints:
+4. Run playbook:
+
+You can run playbook with entrypoints or directly `backup/main.yml` and pass extra variable
+
+
+##### Entrypoints
+
+
+> Export config
 
 ```shell
 ansible-playbook get_export_config.yml
 ```
 
-5. Run backup playbook:
+> Full binary backup
 
 ```shell
 ansible-playbook get_binary_dump.yml
 ```
 
-5. You are always run `backup/main.yml` playbook directly ans pass them extra variable "action" with value from range: export or backup
+##### Arbuments
 
 > Full binary backup
 
