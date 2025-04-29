@@ -1,1 +1,0 @@
-retention_policy: "{{ retention_days | default('7d') }}"

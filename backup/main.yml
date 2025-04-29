@@ -1,9 +1,4 @@
 ---
-- name: Prepare process variables
-  import_playbook: 00-prepare-process-variables.yml
-  vars:
-    action: "{{ action }}"
-
 - name: Get identity from RouterOS device
   import_playbook: 01-get-routeros-identity.yml
 
@@ -12,8 +7,6 @@
 
 - name: Create out dir if not exists
   import_playbook: 03-set-local-backup-params.yml
-  vars:
-    action: "{{ action }}"
 
 - name: Get export file
   import_playbook: 04-get-backup.yml

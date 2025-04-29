@@ -3,7 +3,7 @@
   connection: network_cli
   gather_facts: false
   vars_files:
-    - "./vars/02-retention.yml"
+    - "./vars/01-group-defaults.yml"
   tasks:
     - name: Search backups older than backup retention days
       find:

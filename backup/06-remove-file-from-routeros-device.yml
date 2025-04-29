@@ -2,9 +2,11 @@
 - hosts: ALL_RouterOS
   connection: network_cli
   gather_facts: false
+  vars_files:
+    - "./vars/02-{{ action }}-action-defaults.yml"
   tasks:
     - name: Remove file from RouterOS Device
       routeros_command:
-        commands: 
-          - /file remove {{ identity }}.rsc
+        commands:
+          - /file remove {{ identity }}.{{ backup_extension }}
       when: identity is defined and identity | length > 0
