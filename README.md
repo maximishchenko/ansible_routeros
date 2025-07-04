@@ -61,13 +61,13 @@ ansible-playbook playbooks/get_binary_dump.yml
 > Full binary backup
 
 ```shell
-ansible-playbook playbooks/backup/main.yml --extra-vars "action=backup"
+ansible-playbook playbooks/backup/main.yml --extra-vars "type=backup"
 ```
 
 > Export config
 
 ```shell
-ansible-playbook playbooks/backup/main.yml --extra-vars "action=export"
+ansible-playbook playbooks/backup/main.yml --extra-vars "type=export"
 ```
 
 6. Vault encryption
@@ -96,5 +96,5 @@ ansible-vault encrypt group_vars/GroupName --vault-password-file=.vaultpass
 For run playbook you must set --vault-password-file=.vaultpass
 
 ```shell
-ansible-playbook playbooks/backup/main.yml --extra-args action=export --vault-password-file=.vaultpass
+ansible-playbook playbooks/backup/main.yml --extra-args type=export --vault-password-file=.vaultpass
 ```
