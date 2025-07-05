@@ -11,7 +11,6 @@
     - name: Create full binary backup dump on RouterOS Device
       routeros_command:
         commands:
-          # - /system backup save name={{ identity }}
           - /system backup save {% if not backup_is_encrypted and backup_password is not defined %} dont-encrypt=yes {% endif %} {% if backup_password is defined %} password={{ backup_password }} {% endif %} name={{ identity }}
       when: type == "backup"
 
@@ -27,3 +26,16 @@
         dest: "{{ full_export_path }}"
         protocol: sftp
       when: full_export_path is defined and full_export_path | length > 0
+
+    - name: Encrypt backup file with GPG
+      command: >
+        gpg -e -a -r {{ gpg_key_email }} --passphrase {{ gpg_secret_key }} {{ full_export_path }}
+      delegate_to: localhost
+      when: encrypt_with_gpg|bool == True and gpg_key_email | length > 0 and gpg_secret_key | length > 0
+
+    - name: Remove source file if exists after encryption
+      ansible.builtin.command: rm -f "{{ full_export_path }}"
+      args:
+        removes: "{{ full_export_path }}"
+      delegate_to: localhost
+      when: encrypt_with_gpg|bool == True and gpg_key_email | length > 0 and gpg_secret_key | length > 0
