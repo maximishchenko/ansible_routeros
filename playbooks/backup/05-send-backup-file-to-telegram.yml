@@ -13,6 +13,8 @@
         -F chat_id="{{ telegram_chat_id }}"
         {% if telegram_message_thread_id is defined %}-F message_thread_id="{{ telegram_message_thread_id }}"{% endif %}
         -F document=@"{{ full_export_path }}"
+        -F parse_mode="Markdown"
+        -F caption="{{ identity }}"
       delegate_to: localhost
       when: encrypt_with_gpg|bool == False
     
@@ -22,5 +24,7 @@
         -F chat_id="{{ telegram_chat_id }}"
         {% if telegram_message_thread_id is defined %}-F message_thread_id="{{ telegram_message_thread_id }}"{% endif %}
         -F document=@"{{ full_export_path }}.asc"
+        -F parse_mode="Markdown"
+        -F caption="{{ identity }}"
       delegate_to: localhost
       when: encrypt_with_gpg|bool == True and gpg_key_email | length > 0
