@@ -1,0 +1,13 @@
+---
+- hosts: ALL_RouterOS
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+
+    - name: Get identity from string
+      ansible.builtin.set_fact:
+        identity: "{{ dev_identity.stdout_lines[0][0] | replace('name: ', '') }}"
+      when: dev_identity is defined and dev_identity | length > 0
+      delegate_to: localhost
+

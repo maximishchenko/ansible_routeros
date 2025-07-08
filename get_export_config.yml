@@ -1,0 +1,5 @@
+---
+- name: Run main playbook
+  import_playbook: backup/tasks/main.yml
+  vars:
+    type: "export"

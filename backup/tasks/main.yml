@@ -1,0 +1,25 @@
+---
+- name: Validate 'action' variable
+  import_playbook: 00-validate-action-value.yml
+
+- name: Get identity from RouterOS device
+  import_playbook: 01-get-routeros-identity.yml
+
+- name: Get identity string
+  import_playbook: 02-get-identity-string.yml
+
+- name: Create out dir if not exists
+  import_playbook: 03-set-local-backup-params.yml
+
+- name: Get export file
+  import_playbook: 04-get-backup.yml
+
+- name: Send backup file to Telegram
+  import_playbook: 05-send-backup-file-to-telegram.yml
+
+- name: Remove file from RouterOS device
+  import_playbook: 06-remove-file-from-routeros-device.yml
+
+- name: Clean local backups with backup retention policy
+  import_playbook: 07-clean-local-backups-with-retention-policy.yml
+
