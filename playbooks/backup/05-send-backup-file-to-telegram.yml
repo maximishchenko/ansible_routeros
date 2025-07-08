@@ -2,6 +2,7 @@
 - hosts: ALL_RouterOS
   connection: network_cli
   gather_facts: false
+  serial: 1
   vars_files:
     - "./vars/01-group-defaults.yml"
 
@@ -28,3 +29,7 @@
         -F caption="{{ identity }}"
       delegate_to: localhost
       when: encrypt_with_gpg|bool == True and gpg_key_email | length > 0
+
+    - name: pause for 30 seconds
+      pause:
+        seconds: 10
