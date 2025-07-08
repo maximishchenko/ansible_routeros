@@ -2,13 +2,18 @@
 
 ## Backup and export
 
-This playbook can get backup and export file from RouterOS devices and send them into Telegram group topic
+This playbook can get backup and export file from RouterOS devices and send them into Telegram chat include groups with topics and encrypt backup files with GPG.
+
+
+## Installation
 
 1. Clone git repository
 
 ```shell
 git clone git@github.com:maximishchenko/ansible_routeros.git
 ```
+
+## Setup
 
 2. Copy inventory.sample to inventory
 
@@ -96,5 +101,9 @@ ansible-vault encrypt group_vars/GroupName --vault-password-file=.vaultpass
 For run playbook you must set --vault-password-file=.vaultpass
 
 ```shell
-ansible-playbook playbooks/backup/main.yml --extra-args type=export --vault-password-file=.vaultpass
+ansible-playbook playbooks/get_export_config.yml --vault-password-file=.vaultpass
+```
+
+```shell
+ansible-playbook playbooks/get_binary_dump.yml --vault-password-file=.vaultpass
 ```
