@@ -1,0 +1,10 @@
+---
+- name: Debug errors result
+  ansible.builtin.command: >
+    curl -s -X POST "https://api.telegram.org/bot{{ telegram_bot_token }}/sendMessage"
+    -F chat_id="{{ telegram_chat_id }}"
+    {% if telegram_message_thread_id is defined %}-F message_thread_id="{{ telegram_message_thread_id }}"{% endif %}
+    -F text="Ошибка: {{ ansible_failed_result.msg }}"
+  delegate_to: localhost
+  #debug:
+  #  msg: "{{ ansible_failed_result.msg }}"
