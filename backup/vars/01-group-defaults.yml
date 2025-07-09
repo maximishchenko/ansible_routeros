@@ -1,8 +1,0 @@
-out_root: "{{ out_root_dir | default('../../out') }}"
-group_name_dir: "{{ group_dir | default('ungrouped') }}"
-retention_policy: "{{ retention_days | default('7d') }}"
-export_is_sensitive: "{{ export_show_sensitive | default('false') }}"
-backup_is_encrypted: "{{ backup_encryption | default('true') }}"
-encrypt_with_gpg: "{{ is_encrypt_with_gpg | default('false') }}"
-gpg_secret_key: "{{ gpg_secret }}"
-gpg_key_email: "{{ gpg_email }}"

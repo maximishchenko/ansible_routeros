@@ -1,0 +1,16 @@
+---
+- name: Get identity from RouterOS device
+  ansible.builtin.include_tasks: get-routeros-identity.yml
+    
+- name: Create out dir if not exists
+  ansible.builtin.include_tasks: set-local-backup-params.yml
+    
+- name: Get export file
+  ansible.builtin.include_tasks: get-backup.yml
+    
+- name: Send backup file to Telegram
+  ansible.builtin.include_tasks: send-backup-file-to-telegram.yml
+    
+- name: Remove file from RouterOS device
+  ansible.builtin.include_tasks: remove-file-from-routeros-device.yml
+    

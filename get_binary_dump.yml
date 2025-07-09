@@ -1,5 +1,9 @@
 ---
-- name: Run main playbook
-  import_playbook: backup/tasks/main.yml
-  vars:
-    type: "backup"
+- name: Dump RouterOS Configuration
+  hosts: ALL_RouterOS
+  connection: network_cli
+  gather_facts: false
+  roles:
+    - role: backup
+  vars_files:
+    - "./roles/backup/vars/backup-action-defaults.yml"

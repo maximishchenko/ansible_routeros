@@ -4,12 +4,12 @@ ansible_ssh_private_key_file: ~/.ssh/id_ed25519 # SSH Key for device authenticat
 telegram_chat_id: group_chat_id # Telegram Group Chat ID, required
 telegram_bot_token: bot_token_here # Telegram Bot API Token, required
 telegram_message_thread_id: message_thread_id # Telegram message thread ID (topic), optional
-out_root_dir: ../out # Backups and exports root storage, optional. If missing, ../out will be used.
-group_dir: Contoso # Subfolder inside out_root_dir, optional. Can be used for grouping. If missing, "ungrouped" will be used
-retention_days: 3d # Backup archive retention, optional. If missing, 7d will be used
-export_show_sensitive: false # Show/hide private information in export file, optional. Defualt - false
+out_root: ../out # Backups and exports root storage, optional. If missing, ../out will be used.
+group_name_dir: Contoso # Subfolder inside out_root_dir, optional. Can be used for grouping. If missing, "ungrouped" will be used
+retention_policy: 3d # Backup archive retention, optional. If missing, 7d will be used
+export_is_sensitive: false # Show/hide private information in export file, optional. Defualt - false
 backup_encryption: true # Is binary backup encrypted, optional. Default - true
 backup_password: this_is_my_very_secure_backup_encryption_password # binary backup encryption password, optional. If missing use current user password. If password exists - backup_encryption will be ignored
-is_encrypt_with_gpg: false # Is encrypt backup with GPG
-gpg_email: fake@contoso.com # GPG key email, required if is_encrypt_with_gpg is true
-gpg_secret: fakesecurestring # GPG secret key password, required if is_encrypt_with_gpg is true
+encrypt_with_gpg: false # Is encrypt backup with GPG
+gpg_key_email: fake@contoso.com # GPG key email, required if is_encrypt_with_gpg is true
+gpg_secret_key: fakesecurestring # GPG secret key password, required if is_encrypt_with_gpg is true
