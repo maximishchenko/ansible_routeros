@@ -1,6 +1,5 @@
 ---
 pause_between_messages: 5
-out_root: "../../out"
 group_name_dir: "ungrouped"
 retention_policy: "7d"
 export_is_sensitive: false

@@ -1,7 +1,7 @@
 ---
 - name: Generate out_folder_name
   ansible.builtin.set_fact:
-    out_folder_name: "{{ out_root }}/{{ export_dir }}/{{ group_name_dir }}"
+    out_folder_name: "{{ out_root | default(playbook_dir + '/out') }}/{{ export_dir }}/{{ group_name_dir }}"
   when: export_dir is defined and export_dir | length > 0
   delegate_to: localhost
 
