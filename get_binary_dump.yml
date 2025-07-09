@@ -1,6 +1,7 @@
 ---
 - name: Dump RouterOS Configuration
-  hosts: ALL_RouterOS
+  serial: 1
+  hosts: all
   connection: network_cli
   gather_facts: false
   roles:

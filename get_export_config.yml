@@ -1,6 +1,7 @@
 ---
 - name: Export RouterOS Configuration
-  hosts: ALL_RouterOS
+  hosts: all
+  serial: 1
   connection: network_cli
   gather_facts: false
   roles:

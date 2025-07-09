@@ -11,6 +11,6 @@
 - name: Send backup file to Telegram
   ansible.builtin.include_tasks: includes/send-backup-file-to-telegram.yml
     
-- name: Remove file from RouterOS device
-  ansible.builtin.include_tasks: includes/remove-file-from-routeros-device.yml
+- name: Cleanup backups from device and local storage
+  ansible.builtin.include_tasks: includes/cleanup.yml
     
