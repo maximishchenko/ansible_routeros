@@ -1,5 +1,0 @@
----
-- name: Run main playbook
-  import_playbook: backup/main.yml
-  vars:
-    type: "backup"
