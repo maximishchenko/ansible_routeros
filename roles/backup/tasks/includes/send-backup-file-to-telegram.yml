@@ -3,9 +3,9 @@
   ansible.builtin.command: >
     curl -s -X POST "https://api.telegram.org/bot{{ telegram_bot_token }}/sendDocument"
     -F chat_id="{{ telegram_chat_id }}"
-    {% if telegram_message_thread_id is defined %}-F message_thread_id="{{ telegram_message_thread_id }}"{% endif %}
+    -F message_thread_id="{{ telegram_message_thread_id | default(omit) }}"
     -F document=@"{{ full_export_path }}"
-    -F caption="{{ type }}: {{ identity }}"
+    -F caption="#{{ type }} {{ identity }}"
   delegate_to: localhost
   when: encrypt_with_gpg|bool == False
 
@@ -13,9 +13,9 @@
   ansible.builtin.command: >
     curl -s -X POST "https://api.telegram.org/bot{{ telegram_bot_token }}/sendDocument"
     -F chat_id="{{ telegram_chat_id }}"
-    {% if telegram_message_thread_id is defined %}-F message_thread_id="{{ telegram_message_thread_id }}"{% endif %}
+    -F message_thread_id="{{ telegram_message_thread_id | default(omit) }}"
     -F document=@"{{ full_export_path }}.asc"
-    -F caption="{{ type }}: {{ identity }}"
+    -F caption="#{{ type }} {{ identity }}"
   delegate_to: localhost
   when: encrypt_with_gpg|bool == True and gpg_key_email | length > 0
 
