@@ -21,7 +21,7 @@ git clone git@github.com:maximishchenko/ansible_routeros.git
 cp inventory.sample inventory
 ```
 
-3. Modify inventory file. Create group with IP addresses. Add group to `[ALL_RouterOS:children]`. Format:
+3. Modify inventory file. Create group with IP addresses. Add group to `[all:children]`. Format:
 
 ```
 [GroupName]
@@ -30,7 +30,8 @@ ip_address_2
 ...
 ip_address_N
 
-[ALL_RouterOS:children]
+[all:children]
+GroupName
 ```
 
 4. For each group create file inside `group_vars`. For example:
@@ -39,11 +40,11 @@ ip_address_N
 touch group_vars/GroupName
 ```
 
-> Read `group_vars/SAMPLE_RouterOS` and add group information into group file
+> Read information at `group_vars/SAMPLE_RouterOS` and set params values into group file
 
 5. Run playbook:
 
-You can run playbook with entrypoints or directly `playbooks/backup/main.yml` and pass extra variable
+You can run playbook with pre-defined entrypoints
 
 
 ##### Entrypoints
@@ -52,27 +53,13 @@ You can run playbook with entrypoints or directly `playbooks/backup/main.yml` an
 > Export config
 
 ```shell
-ansible-playbook playbooks/get_export_config.yml
+ansible-playbook get_export_config.yml
 ```
 
 > Full binary backup
 
 ```shell
-ansible-playbook playbooks/get_binary_dump.yml
-```
-
-##### Arguments
-
-> Full binary backup
-
-```shell
-ansible-playbook playbooks/backup/main.yml --extra-vars "type=backup"
-```
-
-> Export config
-
-```shell
-ansible-playbook playbooks/backup/main.yml --extra-vars "type=export"
+ansible-playbook get_binary_dump.yml
 ```
 
 6. Vault encryption
@@ -101,9 +88,9 @@ ansible-vault encrypt group_vars/GroupName --vault-password-file=.vaultpass
 For run playbook you must set --vault-password-file=.vaultpass
 
 ```shell
-ansible-playbook playbooks/get_export_config.yml --vault-password-file=.vaultpass
+ansible-playbook get_export_config.yml --vault-password-file=.vaultpass
 ```
 
 ```shell
-ansible-playbook playbooks/get_binary_dump.yml --vault-password-file=.vaultpass
+ansible-playbook get_binary_dump.yml --vault-password-file=.vaultpass
 ```

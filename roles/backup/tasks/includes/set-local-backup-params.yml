@@ -1,5 +1,5 @@
 ---
-- name: Get out_folder_name
+- name: Generate out_folder_name
   ansible.builtin.set_fact:
     out_folder_name: "{{ out_root }}/{{ export_dir }}/{{ group_name_dir }}"
   when: export_dir is defined and export_dir | length > 0
@@ -18,7 +18,7 @@
   when: out_folder_name is defined and out_folder_name | length > 0
   become: false
 
-- name: Get full export path
+- name: Generate full export path
   ansible.builtin.set_fact:
     full_export_path: "{{ out_folder_name }}/{{ current_datetime }}-{{ identity }}-{{ inventory_hostname }}.{{ backup_extension }}"
   delegate_to: localhost

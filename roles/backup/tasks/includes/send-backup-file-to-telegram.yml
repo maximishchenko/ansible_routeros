@@ -19,7 +19,7 @@
   delegate_to: localhost
   when: encrypt_with_gpg|bool == True and gpg_key_email | length > 0
 
-- name: pause for {{ pause_between_messages}} seconds
+- name: Pause for {{ pause_between_messages}} seconds
   pause:
     seconds: "{{ pause_between_messages }}"
   with_items:
