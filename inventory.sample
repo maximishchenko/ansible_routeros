@@ -1,5 +1,0 @@
-[SAMPLE_RouterOS]
-1.2.3.4
-
-[all:children]
-SAMPLE_RouterOS

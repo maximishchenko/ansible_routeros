@@ -1,2 +1,0 @@
-ansible_network_cli_ssh_type: paramiko # works only with this param or there are corrupted files or timeout / incorrect scp params errors
-ansible_network_os: routeros
