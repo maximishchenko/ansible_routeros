@@ -1,0 +1,6 @@
+- [ ] Send backups to email with curl
+- [ ] Check Storage cleanup policy
+- [ ] Git repository for rsc export files. Only unencrypted
+- [ ] S3 Storage ???
+- [ ] Dude DB backup
+- [ ] Userman DB Backup
