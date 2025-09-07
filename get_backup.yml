@@ -4,4 +4,4 @@
   connection: network_cli
   gather_facts: false
   roles:
-    - role: backup
+    - { role: backup, type: type }

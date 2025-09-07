@@ -1,4 +1,5 @@
 INVENTORY ?= inventory/inventory.yml
+SHELL:=/bin/bash
 
 default: help
 
@@ -25,10 +26,20 @@ setup-control-host: # Prepare control host for environment. Ask sudo password
 	ansible-playbook setup_control_host.yml --ask-become-pass
 
 .SILENT:
+.PHONY: create-inventory-file
+create-inventory-file: # Create inventory.yml file inside inventory directory from inventory.sample.yml template file
+	if [ ! -f inventory/inventory.sample.yml ]; 
+		then
+		echo "Error: inventory template file not found"
+		exit 1
+	fi;
+	cp inventory/inventory.sample.yml inventory/inventory.yml
+
+
+.SILENT:
 .ONESHELL:
 .PHONY: create-group-template
 create-group-template: # Prepare group_vars from template file (group_vars/sample.yml) without comments
-	$(eval SHELL:=/bin/bash)
 	if [ ! -f group_vars/sample.yml ]; 
 		then
 		echo "Error: template file not found"
