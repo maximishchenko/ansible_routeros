@@ -49,11 +49,11 @@ cp group_vars/sample.yml group_vars/group_name.yml
 make create-group-template
 ```
 
-5. Modify each group_vars file with group specific values
+5. Modify each `group_vars` file with group specific values
 
 6. Run playbook:
 
-You can run playbook with pre-defined entrypoint get_backup.yml and pass extra-var type, value must be one of 'backup', 'export'
+You can run playbook with pre-defined entrypoint `get_backup.yml` and pass extra-var type, value must be one of 'backup', 'export'
 
 > Export config
 
@@ -85,7 +85,7 @@ make backup TYPE=backup
 
 You can encrypt `group_vars` files with ansible-vault
 
-Create file with encryption password. For example .vaultpass (exists at .gitignore)
+Create file with encryption password. For example `.vaultpass` (exists at .gitignore)
 
 ```shell
 echo "myverysecurestring" > .vaultpass
@@ -98,7 +98,7 @@ Set file permission
 chmod 600 .vaultpass
 ```
 
-Encrypt `group_vars` file with password stored inside .vaultpass
+Encrypt `group_vars` file with password stored inside `.vaultpass`
 
 ```shell
 ansible-vault encrypt group_vars/group_name --vault-password-file=.vaultpass
@@ -113,3 +113,14 @@ ansible-playbook get_backup.yml -e type=export --vault-password-file=.vaultpass
 ```shell
 ansible-playbook get_backup.yml -e type=backup --vault-password-file=.vaultpass
 ```
+
+You can also use make target `encrypt-group-vars`
+
+```shell
+make encrypt-group-vars
+```
+
+This target check .vaultpass exist. If file not exists will be asked for vault password and stored them in .vaultpass file.
+Set permissions 0600 for `.vaultpass` file.
+Every file in `group_vars` directory except `sample.yml` template will be encrypted with ansible-vault and password stored in `.vaultpass` file.
+File will be encrypted only if not encrypted earlier.
