@@ -1,3 +1,4 @@
-export_dir: 'export'
-backup_extension: 'rsc'
-type: 'export'
+---
+common:
+  export_dir: 'export'
+  backup_extension: 'rsc'

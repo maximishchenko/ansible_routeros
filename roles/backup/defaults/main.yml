@@ -1,9 +1,20 @@
 ---
-pause_between_messages: 5
-group_name_dir: "ungrouped"
-retention_policy: "7d"
-export_is_sensitive: false
-backup_is_encrypted: true
-encrypt_with_gpg: false
 ansible_network_cli_ssh_type: paramiko
 ansible_network_os: routeros
+
+telegram:
+  pause_between_messages: 5
+
+storage:
+  out_root: ../out
+  group_name_dir: "ungrouped"
+  retention_policy: "7d"
+
+export:
+  is_sensitive: false
+
+backup:
+  is_encrypted: true
+
+encryption:
+  encrypt_with_gpg: false

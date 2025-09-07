@@ -1,11 +1,11 @@
 ---
 - name: Debug errors result
   uri:
-    url: "https://api.telegram.org/bot{{ telegram_bot_token }}/sendMessage"
+    url: "https://api.telegram.org/bot{{ telegram.bot_token }}/sendMessage"
     method: POST
     body_format: json
     body:
-      chat_id: "{{ telegram_chat_id }}"
+      chat_id: "{{ telegram.chat_id }}"
       text: "Ошибка: {{ ansible_failed_result.msg }}"
-      message_thread_id: "{{ telegram_message_thread_id | default(omit) }}"
+      message_thread_id: "{{ telegram.message_thread_id | default(omit) }}"
   delegate_to: localhost

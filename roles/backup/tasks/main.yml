@@ -1,5 +1,11 @@
 ---
 - block:
+  
+  - name: Validate type
+    ansible.builtin.include_tasks: includes/validate-type.yml
+
+  - name: Include variables file for specific operatioin
+    ansible.builtin.include_tasks: includes/include-var-files.yml
 
   - name: Get identity from RouterOS device
     ansible.builtin.include_tasks: includes/get-routeros-identity.yml

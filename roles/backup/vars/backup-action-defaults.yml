@@ -1,3 +1,4 @@
-export_dir: 'dump'
-backup_extension: 'backup'
-type: "backup"
+---
+common:
+  export_dir: 'dump'
+  backup_extension: 'backup'

@@ -1,0 +1,9 @@
+- name: Include variables for backup
+  ansible.builtin.include_vars:
+    file: ./roles/backup/vars/backup-action-defaults.yml
+  when: type == 'backup'
+
+- name: Include variables for export
+  ansible.builtin.include_vars:
+    file: ./roles/backup/vars/export-action-defaults.yml
+  when: type == 'export'

@@ -1,0 +1,6 @@
+- name: Validate type
+  ansible.builtin.assert:
+    that:
+      - type in common.types
+    fail_msg: "Invalid type: {{ type }}. Must be one of {{ common.types }}."
+    success_msg: "Type {{ type }} is valid."
