@@ -121,6 +121,9 @@ make encrypt-group-vars
 ```
 
 This target check .vaultpass exist. If file not exists will be asked for vault password and stored them in .vaultpass file.
+
 Set permissions 0600 for `.vaultpass` file.
+
 Every file in `group_vars` directory except `sample.yml` template will be encrypted with ansible-vault and password stored in `.vaultpass` file.
+
 File will be encrypted only if not encrypted earlier.
