@@ -27,7 +27,7 @@ make create-inventory-file
 
 3. Modify inventory file. Example:
 
-> In this example use group name sample with single host 0.0.0.1
+> In this example used group name sample with single host 0.0.0.1
 
 ```
 all:
