@@ -1,26 +1,26 @@
 ---
 - name: Send backup file to Telegram
   ansible.builtin.command: >
-    curl -s -X POST "https://api.telegram.org/bot{{ telegram.bot_token }}/sendDocument"
-    -F chat_id="{{ telegram.chat_id }}"
-    -F message_thread_id="{{ telegram.message_thread_id | default(omit) }}"
+    curl -s -X POST "https://api.telegram.org/bot{{ backup_telegram.bot_token }}/sendDocument"
+    -F chat_id="{{ backup_telegram.chat_id }}"
+    -F message_thread_id="{{ backup_telegram.message_thread_id | default(omit) }}"
     -F document=@"{{ full_export_path }}"
-    -F caption="#{{ type }} {{ identity }}"
+    -F caption="#{{ backup_type }} {{ identity }}"
   delegate_to: localhost
-  when: encryption.encrypt_with_gpg|bool == False
+  when: backup_encryption.encrypt_with_gpg|bool == False
 
 - name: Send encrypted backup file to Telegram
   ansible.builtin.command: >
-    curl -s -X POST "https://api.telegram.org/bot{{ telegram.bot_token }}/sendDocument"
-    -F chat_id="{{ telegram.chat_id }}"
-    -F message_thread_id="{{ telegram.message_thread_id | default(omit) }}"
+    curl -s -X POST "https://api.telegram.org/bot{{ backup_telegram.bot_token }}/sendDocument"
+    -F chat_id="{{ backup_telegram.chat_id }}"
+    -F message_thread_id="{{ backup_telegram.message_thread_id | default(omit) }}"
     -F document=@"{{ full_export_path }}.asc"
-    -F caption="#{{ type }} {{ identity }}"
+    -F caption="#{{ backup_type }} {{ identity }}"
   delegate_to: localhost
-  when: encryption.encrypt_with_gpg|bool == True and encryption.gpg_key_email | length > 0
+  when: backup_encryption.encrypt_with_gpg|bool == True and backup_encryption.gpg_key_email | length > 0
 
-- name: Pause for {{ telegram.pause_between_messages}} seconds
+- name: Pause for {{ backup_telegram.pause_between_messages}} seconds
   pause:
-    seconds: "{{ telegram.pause_between_messages }}"
+    seconds: "{{ backup_telegram.pause_between_messages }}"
   with_items:
-    - "{{ telegram.pause_between_messages }}"
+    - "{{ backup_telegram.pause_between_messages }}"

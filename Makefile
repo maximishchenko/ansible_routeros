@@ -20,7 +20,7 @@ backup: # Create backup of RouterOS device. You must pass TYPE parameter value. 
 		echo "Error: Missing TYPE argument."
 		exit 1
 	else
-		ansible-playbook -i $(INVENTORY) get_backup.yml -e type=$(TYPE) --vault-password-file=$(VAULT_PASSWORD_FILE)
+		ansible-playbook -i $(INVENTORY) get_backup.yml -e backup_type=$(TYPE) --vault-password-file=$(VAULT_PASSWORD_FILE)
 	fi
 
 .SILENT:
@@ -93,11 +93,11 @@ lint: # Lint playbooks with ansible-lint
 .SILENT:
 .PHONY: check
 check: # run ansible playbook with --check mode
-	ansible-playbook --check get_backup.yml -e type=backup
-	ansible-playbook --check get_backup.yml -e type=export
+	ansible-playbook --check get_backup.yml -e backup_type=backup
+	ansible-playbook --check get_backup.yml -e backup_type=export
 
 .SILENT:
 .PHONY: syntax-check
 syntax-check: # run ansible playbook with --syntax-check mode
-	ansible-playbook --syntax-check get_backup.yml -e type=backup
-	ansible-playbook --syntax-check get_backup.yml -e type=export
+	ansible-playbook --syntax-check get_backup.yml -e backup_type=backup
+	ansible-playbook --syntax-check get_backup.yml -e backup_type=export

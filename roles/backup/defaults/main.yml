@@ -4,10 +4,10 @@ ansible_network_os: routeros
 ansible_connection: network_cli
 ansible_gather_facts: False
 
-telegram:
+backup_telegram:
   pause_between_messages: 5
 
-storage:
+backup_storage:
   out_root: ../out
   group_name_dir: "ungrouped"
   retention_policy: "7d"
@@ -18,5 +18,5 @@ export:
 backup:
   is_encrypted: true
 
-encryption:
+backup_encryption:
   encrypt_with_gpg: false

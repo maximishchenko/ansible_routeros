@@ -3,4 +3,4 @@
   hosts: all
   serial: 1
   roles:
-    - { role: backup, type: type }
+    - { role: backup, backup_type: type }

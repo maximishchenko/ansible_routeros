@@ -1,8 +1,8 @@
 ---
 - name: Generate out_folder_name
   ansible.builtin.set_fact:
-    out_folder_name: "{{ storage.out_root | default(playbook_dir + '/out') }}/{{ common.export_dir }}/{{ storage.group_name_dir }}"
-  when: common.export_dir is defined and common.export_dir | length > 0
+    out_folder_name: "{{ backup_storage.out_root | default(playbook_dir + '/out') }}/{{ backup_common.dir }}/{{ backup_storage.group_name_dir }}"
+  when: backup_common.dir is defined and backup_common.dir | length > 0
   delegate_to: localhost
 
 - name: Get current datetime
@@ -20,6 +20,6 @@
 
 - name: Generate full export path
   ansible.builtin.set_fact:
-    full_export_path: "{{ out_folder_name }}/{{ current_datetime }}-{{ identity }}-{{ inventory_hostname }}.{{ common.backup_extension }}"
+    full_export_path: "{{ out_folder_name }}/{{ current_datetime }}-{{ identity }}-{{ inventory_hostname }}.{{ backup_common.extension }}"
   delegate_to: localhost
   when: out_folder_name is defined and out_folder_name | length > 0
