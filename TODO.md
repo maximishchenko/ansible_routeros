@@ -1,3 +1,4 @@
+- [ ] Linters and checkers
 - [ ] Send backups to email with curl
 - [ ] Check Storage cleanup policy
 - [ ] Git repository for rsc export files. Only unencrypted

@@ -4,6 +4,8 @@ SHELL:=/bin/bash
 
 default: help
 
+validate: check syntax-check lint
+
 .SILENT:
 .PHONY: help
 help: # Show help for each of the Makefile recipes.
@@ -83,3 +85,19 @@ encrypt-group-vars: # Encrypt all files inside group_vars directory except sampl
 		fi
 	done
 
+.SILENT:
+.PHONY: lint
+lint: # Lint playbooks with ansible-lint
+	ansible-lint get_backup.yml
+
+.SILENT:
+.PHONY: check
+check: # run ansible playbook with --check mode
+	ansible-playbook --check get_backup.yml -e type=backup
+	ansible-playbook --check get_backup.yml -e type=export
+
+.SILENT:
+.PHONY: syntax-check
+syntax-check: # run ansible playbook with --syntax-check mode
+	ansible-playbook --syntax-check get_backup.yml -e type=backup
+	ansible-playbook --syntax-check get_backup.yml -e type=export

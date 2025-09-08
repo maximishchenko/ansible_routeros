@@ -1,8 +1,6 @@
 ---
 - name: Backup RouterOS Configuration
   hosts: all
-  connection: network_cli
-  gather_facts: false
   serial: 1
   roles:
     - { role: backup, type: type }

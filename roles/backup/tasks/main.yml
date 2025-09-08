@@ -1,6 +1,6 @@
 ---
 - block:
-  
+
   - name: Validate type
     ansible.builtin.include_tasks: includes/validate-type.yml
 

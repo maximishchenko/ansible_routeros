@@ -1,6 +1,8 @@
 ---
 ansible_network_cli_ssh_type: paramiko
 ansible_network_os: routeros
+ansible_connection: network_cli
+ansible_gather_facts: False
 
 telegram:
   pause_between_messages: 5
