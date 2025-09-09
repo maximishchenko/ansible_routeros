@@ -1,5 +1,6 @@
 ---
 backup_telegram:
+  is_enabled: true
   pause_between_messages: 5
 
 backup_storage:

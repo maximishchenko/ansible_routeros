@@ -4,6 +4,7 @@ ansible_ssh_password: this_is_my_very_secure_password_with_full_rights # RouterO
 ansible_ssh_private_key_file: ~/.ssh/id_ed25519 # SSH Key for device authentication, required if ansible_ssh_private_key_file is not set
 
 backup_telegram:
+  is_enabled: true # Enable or disable sending backups to Telegram
   chat_id: group_chat_id # Telegram Group Chat ID, required
   bot_token: bot_token_here # Telegram Bot API Token, required
   message_thread_id: message_thread_id # Telegram message thread ID (topic), optional

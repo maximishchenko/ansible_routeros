@@ -1,4 +1,5 @@
 - [X] Linters and checkers
+- [X] Enable or disable backups sending to Telegram
 - [ ] Send backups to email
 - [ ] Backup to FTP ???
 - [ ] Check Storage cleanup policy

@@ -9,3 +9,4 @@
       text: "Ошибка: {{ ansible_failed_result.msg }}"
       message_thread_id: "{{ backup_telegram.message_thread_id | default(omit) }}"
   delegate_to: localhost
+  when: backup_telegram.is_enabled|bool
