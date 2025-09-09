@@ -1,9 +1,4 @@
 ---
-ansible_network_cli_ssh_type: paramiko
-ansible_network_os: routeros
-ansible_connection: network_cli
-ansible_gather_facts: False
-
 backup_telegram:
   pause_between_messages: 5
 
@@ -12,10 +7,10 @@ backup_storage:
   group_name_dir: "ungrouped"
   retention_policy: "7d"
 
-export:
+backup_export_config:
   is_sensitive: false
 
-backup:
+backup_binary_dump:
   is_encrypted: true
 
 backup_encryption:

@@ -2,5 +2,6 @@
 - name: Backup RouterOS Configuration
   hosts: all
   serial: 1
+  gather_facts: false
   roles:
     - { role: backup, backup_type: type }

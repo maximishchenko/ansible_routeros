@@ -1,13 +1,15 @@
 ---
 - name: Send backup file to Telegram
-  ansible.builtin.command: >
+  ansible.builtin.shell: >
     curl -s -X POST "https://api.telegram.org/bot{{ backup_telegram.bot_token }}/sendDocument"
     -F chat_id="{{ backup_telegram.chat_id }}"
     -F message_thread_id="{{ backup_telegram.message_thread_id | default(omit) }}"
     -F document=@"{{ full_export_path }}"
     -F caption="#{{ backup_type }} {{ identity }}"
   delegate_to: localhost
-  when: backup_encryption.encrypt_with_gpg|bool == False
+  when: not backup_encryption.encrypt_with_gpg|bool
+  tags:
+    - skip_ansible_lint
 
 - name: Send encrypted backup file to Telegram
   ansible.builtin.command: >
@@ -17,10 +19,10 @@
     -F document=@"{{ full_export_path }}.asc"
     -F caption="#{{ backup_type }} {{ identity }}"
   delegate_to: localhost
-  when: backup_encryption.encrypt_with_gpg|bool == True and backup_encryption.gpg_key_email | length > 0
+  when: backup_encryption.encrypt_with_gpg|bool and backup_encryption.gpg_key_email | length > 0
+  tags:
+    - skip_ansible_lint
 
-- name: Pause for {{ backup_telegram.pause_between_messages}} seconds
-  pause:
+- name: Pause (seconds) {{ backup_telegram.pause_between_messages }}
+  ansible.builtin.pause:
     seconds: "{{ backup_telegram.pause_between_messages }}"
-  with_items:
-    - "{{ backup_telegram.pause_between_messages }}"

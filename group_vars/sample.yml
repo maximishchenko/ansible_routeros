@@ -14,10 +14,10 @@ backup_storage:
   group_name_dir: Contoso # Subfolder inside out_root_dir, optional. Can be used for grouping. If missing, "ungrouped" will be used
   retention_policy: 3d # Backup archive retention, optional. If missing, 7d will be used
 
-export:
+backup_export_config:
   is_sensitive: false # Show/hide private information in export file, optional. Defualt - false
 
-backup:
+backup_binary_dump:
   is_encrypted: true # Is binary backup encrypted, optional. Default - true
   password: this_is_my_very_secure_backup_encryption_password # binary backup encryption password, optional. If missing use current user password. If password exists - backup_encryption will be ignored
 

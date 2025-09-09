@@ -18,7 +18,7 @@ backup: # Create backup of RouterOS device. You must pass TYPE parameter value. 
 	if [ -z "$(TYPE)" ];
 	then
 		echo "Error: Missing TYPE argument."
-		exit 1
+		exit 1фт
 	else
 		ansible-playbook -i $(INVENTORY) get_backup.yml -e backup_type=$(TYPE) --vault-password-file=$(VAULT_PASSWORD_FILE)
 	fi
@@ -37,7 +37,6 @@ create-inventory-file: # Create inventory.yml file inside inventory directory fr
 		exit 1
 	fi;
 	cp inventory/inventory.sample.yml inventory/inventory.yml
-
 
 .SILENT:
 .ONESHELL:
@@ -88,7 +87,7 @@ encrypt-group-vars: # Encrypt all files inside group_vars directory except sampl
 .SILENT:
 .PHONY: lint
 lint: # Lint playbooks with ansible-lint
-	ansible-lint get_backup.yml
+	ansible-lint get_backup.yml --strict -v
 
 .SILENT:
 .PHONY: check

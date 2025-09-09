@@ -1,6 +1,6 @@
 ---
 - name: Get identity from RouterOS device
-  routeros_command:
+  community.routeros.command:
     commands: /system identity print
   register: dev_identity
 

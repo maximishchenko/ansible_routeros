@@ -7,13 +7,14 @@
 
 - name: Get current datetime
   ansible.builtin.set_fact:
-    current_datetime: "{{ now(utc=false,fmt='%Y-%m-%d-%H-%M-%S') }}"
+    current_datetime: "{{ now(utc=false, fmt='%Y-%m-%d-%H-%M-%S') }}"
   delegate_to: localhost
 
 - name: Create out dir if not exists
   ansible.builtin.file:
     path: "{{ out_folder_name }}"
     state: directory
+    mode: '0755'
   delegate_to: localhost
   when: out_folder_name is defined and out_folder_name | length > 0
   become: false

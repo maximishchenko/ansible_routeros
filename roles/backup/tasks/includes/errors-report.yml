@@ -1,6 +1,6 @@
 ---
 - name: Debug errors result
-  uri:
+  ansible.builtin.uri:
     url: "https://api.telegram.org/bot{{ backup_telegram.bot_token }}/sendMessage"
     method: POST
     body_format: json
