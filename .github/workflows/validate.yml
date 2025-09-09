@@ -32,7 +32,3 @@ jobs:
 
     - name: Run validation via Make
       run: make validate
-        path: |
-          **/*.log
-          **/lint-*.txt
-        if-no-files-found: ignore
