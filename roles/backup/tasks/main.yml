@@ -1,28 +1,24 @@
 ---
-- block:
-  
-  - name: Validate type
-    ansible.builtin.include_tasks: includes/validate-type.yml
-
-  - name: Include variables file for specific operatioin
-    ansible.builtin.include_tasks: includes/include-var-files.yml
-
-  - name: Get identity from RouterOS device
-    ansible.builtin.include_tasks: includes/get-routeros-identity.yml
-      
-  - name: Create out dir if not exists
-    ansible.builtin.include_tasks: includes/set-local-backup-params.yml
-      
-  - name: Get export file
-    ansible.builtin.include_tasks: includes/get-backup.yml
-      
-  - name: Send backup file to Telegram
-    ansible.builtin.include_tasks: includes/send-backup-file-to-telegram.yml
-      
-  - name: Cleanup backups from device and local storage
-    ansible.builtin.include_tasks: includes/cleanup.yml
-
+- name: Execute backup procedure
+  vars:
+    ansible_network_cli_ssh_type: "{{ backup_ansible_connection.network_cli_ssh_type }}"
+    ansible_network_os: "{{ backup_ansible_connection.network_os }}"
+    ansible_connection: "{{ backup_ansible_connection.connection }}"
+  block:
+    - name: Validate type
+      ansible.builtin.include_tasks: includes/validate-type.yml
+    - name: Include variables file for specific operatioin
+      ansible.builtin.include_tasks: includes/include-var-files.yml
+    - name: Get identity from RouterOS device
+      ansible.builtin.include_tasks: includes/get-routeros-identity.yml
+    - name: Create out dir if not exists
+      ansible.builtin.include_tasks: includes/set-local-backup-params.yml
+    - name: Get export file
+      ansible.builtin.include_tasks: includes/get-backup.yml
+    - name: Send backup file to Telegram
+      ansible.builtin.include_tasks: includes/send-backup-file-to-telegram.yml
+    - name: Cleanup backups from device and local storage
+      ansible.builtin.include_tasks: includes/cleanup.yml
   rescue:
-
     - name: Report errors
       ansible.builtin.include_tasks: includes/errors-report.yml

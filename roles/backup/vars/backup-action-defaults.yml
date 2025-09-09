@@ -1,4 +1,4 @@
 ---
-common:
-  export_dir: 'dump'
-  backup_extension: 'backup'
+backup_common:
+  dir: 'dump'
+  extension: 'backup'

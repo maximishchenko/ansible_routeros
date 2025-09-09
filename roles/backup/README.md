@@ -27,7 +27,6 @@ Create export configuration
 ```
 - hosts: all
   connection: network_cli
-  gather_facts: false
   roles:
      - { role: backup, type: export }
 ```
@@ -37,7 +36,6 @@ Create binary backup
 ```
 - hosts: all
   connection: network_cli
-  gather_facts: false
   roles:
      - { role: backup, type: backup }
 ```

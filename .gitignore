@@ -1,6 +1,11 @@
 out/
+
 .vaultpass
+
 inventory/*
 !inventory/inventory.sample.yml
+
 group_vars/*
 !group_vars/sample.yml
+
+.ansible/

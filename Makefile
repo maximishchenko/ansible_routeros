@@ -4,6 +4,8 @@ SHELL:=/bin/bash
 
 default: help
 
+validate: check syntax-check lint
+
 .SILENT:
 .PHONY: help
 help: # Show help for each of the Makefile recipes.
@@ -16,9 +18,9 @@ backup: # Create backup of RouterOS device. You must pass TYPE parameter value. 
 	if [ -z "$(TYPE)" ];
 	then
 		echo "Error: Missing TYPE argument."
-		exit 1
+		exit 1фт
 	else
-		ansible-playbook -i $(INVENTORY) get_backup.yml -e type=$(TYPE) --vault-password-file=$(VAULT_PASSWORD_FILE)
+		ansible-playbook -i $(INVENTORY) get_backup.yml -e backup_type=$(TYPE) --vault-password-file=$(VAULT_PASSWORD_FILE)
 	fi
 
 .SILENT:
@@ -35,7 +37,6 @@ create-inventory-file: # Create inventory.yml file inside inventory directory fr
 		exit 1
 	fi;
 	cp inventory/inventory.sample.yml inventory/inventory.yml
-
 
 .SILENT:
 .ONESHELL:
@@ -83,3 +84,19 @@ encrypt-group-vars: # Encrypt all files inside group_vars directory except sampl
 		fi
 	done
 
+.SILENT:
+.PHONY: lint
+lint: # Lint playbooks with ansible-lint
+	ansible-lint get_backup.yml --strict -v
+
+.SILENT:
+.PHONY: check
+check: # run ansible playbook with --check mode
+	ansible-playbook --check get_backup.yml -e backup_type=backup
+	ansible-playbook --check get_backup.yml -e backup_type=export
+
+.SILENT:
+.PHONY: syntax-check
+syntax-check: # run ansible playbook with --syntax-check mode
+	ansible-playbook --syntax-check get_backup.yml -e backup_type=backup
+	ansible-playbook --syntax-check get_backup.yml -e backup_type=export
