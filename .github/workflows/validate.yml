@@ -32,12 +32,6 @@ jobs:
 
     - name: Run validation via Make
       run: make validate
-
-    - name: Upload lint results as artifact (optional)
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: ansible-lint-results
         path: |
           **/*.log
           **/lint-*.txt
