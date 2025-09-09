@@ -30,7 +30,7 @@
     - gpg_result.rc == 0
     - gpg_result.stdout | length > 0
   when:
-    - backup_encryption.encrypt_with_gpg | bool
+    - backup_encryption.is_enabled | bool
     - backup_encryption.gpg_key_email | length > 0
     - backup_encryption.gpg_secret_key | length > 0
 
@@ -40,6 +40,6 @@
     removes: "{{ full_export_path }}"
   delegate_to: localhost
   when:
-    - backup_encryption.encrypt_with_gpg|bool
+    - backup_encryption.is_enabled|bool
     - backup_encryption.gpg_key_email | length > 0
     - backup_encryption.gpg_secret_key | length > 0

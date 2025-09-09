@@ -14,4 +14,4 @@ backup_binary_dump:
   is_encrypted: true
 
 backup_encryption:
-  encrypt_with_gpg: false
+  is_enabled: false

@@ -22,6 +22,6 @@ backup_binary_dump:
   password: this_is_my_very_secure_backup_encryption_password # binary backup encryption password, optional. If missing use current user password. If password exists - backup_encryption will be ignored
 
 backup_encryption:
-  encrypt_with_gpg: false # Is encrypt backup with GPG
-  gpg_key_email: fake@contoso.com # GPG key email, required if is_encrypt_with_gpg is true
-  gpg_secret_key: fakesecurestring # GPG secret key password, required if is_encrypt_with_gpg is true
+  is_enabled: false # Is encrypt backup with GPG
+  gpg_key_email: fake@contoso.com # GPG key email, required if is_enabled is true
+  gpg_secret_key: fakesecurestring # GPG secret key password, required if is_enabled is true
