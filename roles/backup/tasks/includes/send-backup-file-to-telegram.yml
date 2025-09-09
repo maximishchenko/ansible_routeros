@@ -7,7 +7,7 @@
     -F document=@"{{ full_export_path }}"
     -F caption="#{{ backup_type }} {{ identity }}"
   delegate_to: localhost
-  when: not backup_encryption.encrypt_with_gpg|bool
+  when: not backup_encryption.is_enabled|bool
   tags:
     - skip_ansible_lint
 
@@ -19,7 +19,7 @@
     -F document=@"{{ full_export_path }}.asc"
     -F caption="#{{ backup_type }} {{ identity }}"
   delegate_to: localhost
-  when: backup_encryption.encrypt_with_gpg|bool and backup_encryption.gpg_key_email | length > 0
+  when: backup_encryption.is_enabled|bool and backup_encryption.gpg_key_email | length > 0
   tags:
     - skip_ansible_lint
 

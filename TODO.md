@@ -1,5 +1,6 @@
 - [X] Linters and checkers
-- [ ] Send backups to email with curl
+- [ ] Send backups to email
+- [ ] Backup to FTP ???
 - [ ] Check Storage cleanup policy
 - [ ] Git repository for rsc export files. Only unencrypted
 - [ ] S3 Storage ???
