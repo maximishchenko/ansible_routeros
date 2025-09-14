@@ -1,0 +1,29 @@
+---
+# TODO move from curl to ansible.builtin.uri
+- name: Send operation report to Telegram
+  ansible.builtin.shell: >
+    curl -s -X POST "https://api.telegram.org/bot{{ report_telegram.bot_token }}/sendDocument"
+    -F chat_id="{{ report_telegram.chat_id }}"
+    -F message_thread_id="{{ report_telegram.message_thread_id | default(omit) }}"
+    -F document=@"{{ report_attach }}"
+    -F caption="{{ report_caption }}"
+  delegate_to: localhost
+  when:
+    - report_telegram.is_enabled|bool
+    - not error|bool
+  tags:
+    - skip_ansible_lint
+
+- name: Debug errors result to Telegram
+  ansible.builtin.uri:
+    url: "https://api.telegram.org/bot{{ report_telegram.bot_token }}/sendMessage"
+    method: POST
+    body_format: json
+    body:
+      chat_id: "{{ report_telegram.chat_id }}"
+      text: "Ошибка: {{ report_error_msg }}"
+      message_thread_id: "{{ report_telegram.message_thread_id | default(omit) }}"
+  delegate_to: localhost
+  when:
+    - report_telegram.is_enabled|bool
+    - error|bool

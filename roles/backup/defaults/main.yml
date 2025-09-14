@@ -1,13 +1,4 @@
 ---
-backup_telegram:
-  is_enabled: true
-  pause_between_messages: 5
-
-backup_storage:
-  out_root: ../out
-  group_name_dir: "ungrouped"
-  retention_policy: "7d"
-
 backup_export_config:
   is_sensitive: false
 

@@ -3,5 +3,27 @@
   hosts: all
   serial: 1
   gather_facts: false
+  vars:
+    error: false
   roles:
-    - { role: backup, backup_type: type }
+    - role: backup
+      backup_type: "{{ type }}"
+    - role: encryption
+      encryption_src: "{{ backup_tmp_path }}"
+    - role: report
+      report_attach: "{{ backup_tmp_path }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
+      report_caption: "{{ backup_caption }}"
+      report_error_msg: "{{ backup_report_msg }}"
+  tasks:
+    - name: Remove tmp file if exists
+      ansible.builtin.command: rm -r "{{ backup_tmp_path }}"
+      args:
+        removes: "{{ backup_tmp_path }}"
+      delegate_to: localhost
+    - name: Remove encrypted tmp file if exists
+      ansible.builtin.command: rm -r "{{ backup_tmp_path }}.asc"
+      args:
+        removes: "{{ backup_tmp_path }}.asc"
+      delegate_to: localhost
+      when:
+        - encryption_common.is_enabled | bool

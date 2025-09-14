@@ -1,6 +1,0 @@
-- name: Validate type
-  ansible.builtin.assert:
-    that:
-      - backup_type in backup_common.types
-    fail_msg: "Invalid backup_type: {{ backup_type }}. Must be one of {{ backup_common.types }}."
-    success_msg: "Type {{ backup_type }} is valid."
