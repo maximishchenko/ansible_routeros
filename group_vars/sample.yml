@@ -9,10 +9,14 @@ report_telegram:
   bot_token: bot_token_here # Telegram Bot API Token, required
   message_thread_id: message_thread_id # Telegram message thread ID (topic), optional
 
-# backup_storage:
-#   out_root: ../out # Backups and exports root storage, optional. If missing, ../out will be used.
-#   group_name_dir: Contoso # Subfolder inside out_root_dir, optional. Can be used for grouping. If missing, "ungrouped" will be used
-#   retention_policy: 3d # Backup archive retention, optional. If missing, 7d will be used
+report_email:
+  is_enabled: true # Enable or disable sending backups to Email
+  smtp_host: smtp.contoso.com # SMTP server address for sending
+  smtp_username: fake@contoso.com # SMTP server username for authentication
+  smtp_password: fakeapppassword # SMTP server password for authentication
+  smtp_recipient: # SMTP server recipients
+    - rcpt1@contoso.com
+    - rcpt2@contoso.com
 
 backup_export_config:
   is_sensitive: false # Show/hide private information in export file, optional. Defualt - false

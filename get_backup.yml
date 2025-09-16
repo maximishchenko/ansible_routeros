@@ -11,9 +11,10 @@
     - role: encryption
       encryption_src: "{{ backup_tmp_path }}"
     - role: report
-      report_attach: "{{ backup_tmp_path }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
+      report_attach: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
       report_caption: "{{ backup_caption }}"
       report_error_msg: "{{ backup_report_msg }}"
+      report_type: "{{ type }}"
   tasks:
     - name: Remove tmp file if exists
       ansible.builtin.command: rm -r "{{ backup_tmp_path }}"

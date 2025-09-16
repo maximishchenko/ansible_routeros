@@ -1,3 +1,6 @@
 ---
 report_telegram:
   is_enabled: true
+
+report_email:
+  is_enabled: false

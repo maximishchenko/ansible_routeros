@@ -14,6 +14,40 @@
   tags:
     - skip_ansible_lint
 
+- name: Send operation report to Email
+  community.general.mail:
+    host: "{{ report_email.smtp_host }}"
+    port: 587
+    username: "{{ report_email.smtp_username }}"
+    password: "{{ report_email.smtp_password }}"
+    from: "{{ report_email.smtp_from | default(report_email.smtp_username) }}"
+    to: "{{ report_email.smtp_recipient }}"
+    subject: "Operation successfull: {{ report_type }}"
+    body: "Operation successfull: {{ report_caption }}"
+    attach:
+      - "{{ report_attach }}"
+    secure: starttls
+  delegate_to: localhost
+  when:
+    - report_email.is_enabled|bool
+    - not error|bool
+
+- name: Send errors result to Email
+  community.general.mail:
+    host: "{{ report_email.smtp_host }}"
+    port: 587
+    username: "{{ report_email.smtp_username }}"
+    password: "{{ report_email.smtp_password }}"
+    from: "{{ report_email.smtp_from | default(report_email.smtp_username) }}"
+    to: "{{ report_email.smtp_recipient }}"
+    subject: "Error report."
+    body: "{{ report_error_msg }}"
+    secure: starttls
+  delegate_to: localhost
+  when:
+    - report_email.is_enabled|bool
+    - error|bool
+
 - name: Debug errors result to Telegram
   ansible.builtin.uri:
     url: "https://api.telegram.org/bot{{ report_telegram.bot_token }}/sendMessage"

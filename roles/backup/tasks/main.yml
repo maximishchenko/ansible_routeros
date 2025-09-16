@@ -14,7 +14,6 @@
         fail_msg: "Invalid backup_type: {{ backup_type }}. Must be one of {{ backup_common.types }}."
         success_msg: "Type {{ backup_type }} is valid."
 
-    # TODO ternary extension, remove vars/backup.yml and vars/export.yml
     - name: Include variables
       ansible.builtin.include_vars:
         file: vars/{{ backup_type }}.yml
