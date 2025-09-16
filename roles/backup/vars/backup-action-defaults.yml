@@ -1,4 +1,0 @@
----
-backup_common:
-  dir: 'dump'
-  extension: 'backup'

@@ -1,0 +1,11 @@
+galaxy_info:
+    author: Maxim Ishchenko <m.g.ishchenko@yandex.ru>
+    description: Role for encrypting backups from MikroTik RouterOS devices
+    license: BSD-3
+    min_ansible_version: "2.14"
+    platforms:
+        - name: AIX
+          versions:
+              - all
+    galaxy_tags: []
+dependencies: []

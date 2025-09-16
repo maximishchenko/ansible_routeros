@@ -1,14 +1,14 @@
-Ansible RouterOS Backup
+Role Name
 =========
 
-This playbook can get backup and export file from RouterOS devices and downloaded them for temporaty directory.
+A brief description of the role goes here.
 
 Requirements
 ------------
 
 This playbook require any installed packages on Ansible control host:
 
-- python3-paramiko
+- curl
 
 For initial setup you can use setup_control_host.yml playbook or run make target setup-control-host
 
@@ -20,23 +20,13 @@ All variables are commented inside group sample template file in group_vars/samp
 Example Playbook
 ----------------
 
-Create export configuration
-
 ```
 - hosts: all
   connection: network_cli
   roles:
-    - role: backup
-      backup_type: "{{ type }}"
-```
-
-Create binary backup
-
-```
-- hosts: all
-  connection: network_cli
-  roles:
-     - { role: backup, type: backup }
+    - role: report
+      attach: "{{ tmp_path }}"
+      caption: "{{ report_caption }}"
 ```
 
 License

@@ -1,0 +1,13 @@
+---
+- name: Encrypt tmp file with GPG
+  ansible.builtin.command: >
+    gpg -e -a -r {{ encryption_common.gpg_key_email }} --passphrase {{ encryption_common.gpg_secret_key }} {{ encryption_src }}
+  delegate_to: localhost
+  register: encryption_gpg_result
+  changed_when:
+    - encryption_gpg_result.rc == 0
+    - encryption_gpg_result.stdout | length > 0
+  when:
+    - encryption_common.is_enabled | bool
+    - encryption_common.gpg_key_email | length > 0
+    - encryption_common.gpg_secret_key | length > 0

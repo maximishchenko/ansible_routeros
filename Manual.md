@@ -8,5 +8,5 @@ ssh-add ~/.ssh/id_rsa
 ### ansible collections installation
 
 ```shell
-ansible-galaxy -i requirements.yml
+ansible-galaxy install -r requirements.yml
 ```

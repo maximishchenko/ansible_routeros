@@ -3,7 +3,7 @@
 ## Backup and export
 
 This playbook can get backup and export file from RouterOS devices and send them into Telegram chat include groups with topics and encrypt backup files with GPG.
-
+If backup_telegram.is_enabled set to false backups will be stored only localy.
 
 ## Setup
 
@@ -13,13 +13,15 @@ This playbook can get backup and export file from RouterOS devices and send them
 git clone git@github.com:maximishchenko/ansible_routeros.git
 ```
 
-2. Copy sample inventory file to inventory
+2. Copy sample [inventory.sample.yml](inventory.sample.yml) file to [inventory.yml](inventory.yml)
+
+ - With shell command
 
 ```shell
 cp inventory/inventory.sample.yml inventory/inventory.yml
 ```
 
-> You can also use make target create-inventory-file
+ - With makefile target
 
 ```shell
 make create-inventory-file
@@ -27,9 +29,9 @@ make create-inventory-file
 
 3. Modify inventory file. Example:
 
-> In this example used group name sample with single host 0.0.0.1
+> In this example used group name `sample` with single host `0.0.0.1`
 
-```
+```yml
 all:
   children:
     sample:
@@ -37,51 +39,55 @@ all:
         0.0.0.1:
 ```
 
-4. For each group create file inside `group_vars`.
+4. For each group create file inside [group_vars/](group_vars/).
 
-```
+ - With shell command
+
+```shell
 cp group_vars/sample.yml group_vars/group_name.yml
 ```
 
-> You can also use make target create-group-template and input group name. 
+ - With makefile target
 
 ```shell
 make create-group-template
 ```
 
-5. Modify each `group_vars` file with group specific values
+5. Modify each [group_vars/](group_vars/) file with group specific values
 
 6. Run playbook:
 
-You can run playbook with pre-defined entrypoint `get_backup.yml` and pass extra-var type, value must be one of 'backup', 'export'
+You can run playbook with pre-defined entrypoint [get_backup.yml](get_backup.yml) and pass extra-var type, value must be one of `backup`, `export`
 
-> Export config
+### Export config
+
+ - With shell command
 
 ```shell
 ansible-playbook -i inventory/inventory.yml get_backup.yml -e type=export
 ```
-
-> Full binary backup
-
-```shell
-ansible-playbook -i inventory/inventory.yml get_backup.yml -e type=backup
-```
-
-> You can use make target backup and pass TYPE variable value for passing to extra-var
-
-> Export config
+ - With makefile target
 
 ```shell
 make backup TYPE=export
 ```
 
-> Full binary backup
+### Full binary backup
+
+ - With shell command
+
+```shell
+ansible-playbook -i inventory/inventory.yml get_backup.yml -e type=backup
+```
+ - With makefile target
 
 ```shell
 make backup TYPE=backup
 ```
 
 6. Vault encryption
+
+You can use [Makefile](Makefile) target `encrypt-group-vars`
 
 You can encrypt `group_vars` files with ansible-vault
 

@@ -4,21 +4,90 @@
     ansible_network_cli_ssh_type: "{{ backup_ansible_connection.network_cli_ssh_type }}"
     ansible_network_os: "{{ backup_ansible_connection.network_os }}"
     ansible_connection: "{{ backup_ansible_connection.connection }}"
+
   block:
+
     - name: Validate type
-      ansible.builtin.include_tasks: includes/validate-type.yml
-    - name: Include variables file for specific operatioin
-      ansible.builtin.include_tasks: includes/include-var-files.yml
+      ansible.builtin.assert:
+        that:
+          - backup_type in backup_common.types
+        fail_msg: "Invalid backup_type: {{ backup_type }}. Must be one of {{ backup_common.types }}."
+        success_msg: "Type {{ backup_type }} is valid."
+
+    - name: Include variables
+      ansible.builtin.include_vars:
+        file: vars/{{ backup_type }}.yml
+
+    - name: Get current datetime
+      ansible.builtin.set_fact:
+        backup_current_datetime: "{{ now(utc=false, fmt='%Y-%m-%d-%H-%M-%S') }}"
+      delegate_to: localhost
+
     - name: Get identity from RouterOS device
-      ansible.builtin.include_tasks: includes/get-routeros-identity.yml
-    - name: Create out dir if not exists
-      ansible.builtin.include_tasks: includes/set-local-backup-params.yml
-    - name: Get export file
-      ansible.builtin.include_tasks: includes/get-backup.yml
-    - name: Send backup file to Telegram
-      ansible.builtin.include_tasks: includes/send-backup-file-to-telegram.yml
-    - name: Cleanup backups from device and local storage
-      ansible.builtin.include_tasks: includes/cleanup.yml
+      community.routeros.command:
+        commands: /system identity print
+      register: backup_src_identity
+
+    - name: Get identity from string
+      ansible.builtin.set_fact:
+        backup_identity: "{{ backup_src_identity.stdout_lines[0][0] | replace('name: ', '') }}"
+      when: backup_src_identity is defined and backup_src_identity | length > 0
+      delegate_to: localhost
+
+    - name: Generate tmp path
+      ansible.builtin.set_fact:
+        backup_tmp_path: >-
+          "{{ backup_common.tmp_dir }}/{{ backup_current_datetime }}-{{ backup_identity }}-{{ inventory_hostname }}.{{ backup_properties.extension }}"
+      delegate_to: localhost
+      tags:
+        - skip_ansible_lint
+
+    - name: Generate report caption
+      ansible.builtin.set_fact:
+        backup_caption: "#{{ backup_type }} {{ backup_identity }}"
+      delegate_to: localhost
+
+    - name: Create full binary backup dump on RouterOS Device
+      community.routeros.command:
+        commands:
+          - >-
+            /system backup save
+            {% if not backup_binary_dump.is_encrypted and backup_binary_dump.password is not defined %} dont-encrypt=yes {% endif %}
+            {% if backup_binary_dump.password is defined %} password={{ backup_binary_dump.password }} {% endif %} name={{ backup_identity }}
+      when: backup_type == "backup"
+
+    - name: Create export on RouterOS Device
+      community.routeros.command:
+        commands:
+          - /export  {% if backup_export_config.is_sensitive %}show-sensitive terse{% endif %} file={{ backup_identity }}
+      when: backup_type == "export"
+
+    - name: Download tmp file
+      ansible.netcommon.net_get:
+        src: "{{ backup_identity }}.{{ backup_properties.extension }}"
+        dest: "{{ backup_tmp_path }}"
+        protocol: sftp
+      when:
+        - backup_tmp_path is defined
+        - backup_tmp_path | length > 0
+
+    - name: Remove file from device
+      community.routeros.command:
+        commands:
+          - /file remove {{ backup_identity }}.{{ backup_properties.extension }}
+
   rescue:
-    - name: Report errors
-      ansible.builtin.include_tasks: includes/errors-report.yml
+
+    - name: Set error
+      ansible.builtin.set_fact:
+        error: true
+      delegate_to: localhost
+      tags:
+        - skip_ansible_lint
+
+    - name: Save error message
+      ansible.builtin.set_fact:
+        backup_error_msg: "{{ ansible_failed_result.msg | default('Backup processing error.') }}"
+      delegate_to: localhost
+      tags:
+        - skip_ansible_lint
