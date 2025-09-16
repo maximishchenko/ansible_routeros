@@ -1,0 +1,20 @@
+---
+- name: Send file with creation sub directories
+  ansible.builtin.shell: >
+    curl -T {{ storage_src }}
+    ftp://{{ storage_ftp.host }}:{{ storage_ftp.port }}{{ storage_ftp.root_dir }}/{{ storage_type }}/{{ storage_src | basename }}
+    --user {{ storage_ftp.username }}:{{ storage_ftp.password }}
+    --ftp-create-dirs
+  register: storage_ftp_result
+  changed_when: storage_ftp_result.rc == 0
+  failed_when: storage_ftp_result.rc != 0
+  delegate_to: localhost
+  when:
+    - storage_ftp.is_enabled|bool
+    - not error|bool
+  tags:
+    - skip_ansible_lint
+- name: Send FTP output storage_ftp_result
+  delegate_to: localhost
+  ansible.builtin.debug:
+    var: storage_ftp_result.stdout

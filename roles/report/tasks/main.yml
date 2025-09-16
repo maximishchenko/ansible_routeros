@@ -1,5 +1,4 @@
 ---
-# TODO move from curl to ansible.builtin.uri
 - name: Send operation report to Telegram
   ansible.builtin.shell: >
     curl -s -X POST "https://api.telegram.org/bot{{ report_telegram.bot_token }}/sendDocument"
@@ -16,12 +15,12 @@
 
 - name: Send operation report to Email
   community.general.mail:
-    host: "{{ report_email.smtp_host }}"
+    host: "{{ report_email.host }}"
     port: 587
-    username: "{{ report_email.smtp_username }}"
-    password: "{{ report_email.smtp_password }}"
-    from: "{{ report_email.smtp_from | default(report_email.smtp_username) }}"
-    to: "{{ report_email.smtp_recipient }}"
+    username: "{{ report_email.username }}"
+    password: "{{ report_email.password }}"
+    from: "{{ report_email.smtp_from | default(report_email.username) }}"
+    to: "{{ report_email.recipient }}"
     subject: "Operation successfull: {{ report_type }}"
     body: "Operation successfull: {{ report_caption }}"
     attach:
@@ -34,12 +33,12 @@
 
 - name: Send errors result to Email
   community.general.mail:
-    host: "{{ report_email.smtp_host }}"
+    host: "{{ report_email.host }}"
     port: 587
-    username: "{{ report_email.smtp_username }}"
-    password: "{{ report_email.smtp_password }}"
-    from: "{{ report_email.smtp_from | default(report_email.smtp_username) }}"
-    to: "{{ report_email.smtp_recipient }}"
+    username: "{{ report_email.username }}"
+    password: "{{ report_email.password }}"
+    from: "{{ report_email.smtp_from | default(report_email.username) }}"
+    to: "{{ report_email.recipient }}"
     subject: "Error report."
     body: "{{ report_error_msg }}"
     secure: starttls

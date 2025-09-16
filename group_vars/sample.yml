@@ -11,12 +11,20 @@ report_telegram:
 
 report_email:
   is_enabled: true # Enable or disable sending backups to Email
-  smtp_host: smtp.contoso.com # SMTP server address for sending
-  smtp_username: fake@contoso.com # SMTP server username for authentication
-  smtp_password: fakeapppassword # SMTP server password for authentication
-  smtp_recipient: # SMTP server recipients
+  host: smtp.contoso.com # SMTP server address for sending
+  username: fake@contoso.com # SMTP server username for authentication
+  password: fakeapppassword # SMTP server password for authentication
+  recipient: # SMTP server recipients
     - rcpt1@contoso.com
     - rcpt2@contoso.com
+
+storage_ftp:
+  is_enabled: true # Enable or disable sending backups to FTP server
+  username: fake # FTP server username
+  password: fakeapppassword # FTP server password
+  host: ftp.contoso.com # FTP server address
+  port: 21 # FTP server port
+  root_dir: / # FTP server folder
 
 backup_export_config:
   is_sensitive: false # Show/hide private information in export file, optional. Defualt - false
