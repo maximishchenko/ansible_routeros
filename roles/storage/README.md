@@ -1,31 +1,38 @@
-Role Name
+Storage
 =========
 
-A brief description of the role goes here.
+This playbook can send backup or export files from RouterOS devices to any storages.
+Supports:
+  - FTP
+  - Folder (can be local folder or mounted resource, such as SMB or NFS)
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This playbook require any installed packages on Ansible control host:
+
+- curl
+
+For initial setup you can use setup_control_host.yml playbook or run make target setup-control-host
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+All variables are commented inside group sample template file in group_vars/sample.yml
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```
+- hosts: all
+  connection: network_cli
+  roles:
+    - role: storage
+      storage_src: "/tmp/device.backup"
+      storage_type: "backup"
+```
 
 License
 -------
@@ -35,4 +42,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Maxim Ishchenko <m.g.ishchenko@yandex.ru>

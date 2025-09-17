@@ -18,6 +18,10 @@ report_email:
     - rcpt1@contoso.com
     - rcpt2@contoso.com
 
+storage_folder: 
+  is_enabled: true # Enable or disable local (can be mounted resources) folder storage
+  path: /mnt/fakepath/ # path local folder storage
+
 storage_ftp:
   is_enabled: true # Enable or disable sending backups to FTP server
   username: fake # FTP server username

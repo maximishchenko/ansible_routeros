@@ -1,7 +1,7 @@
 - [X] Linters and checkers
 - [X] Enable or disable backups sending to Telegram
-- [ ] Send backups to email
-- [ ] Backup to FTP ???
+- [X] Send backups to email
+- [X] Backup to FTP ???
 - [ ] Check Storage cleanup policy
 - [ ] Git repository for rsc export files. Only unencrypted
 - [ ] S3 Storage ???

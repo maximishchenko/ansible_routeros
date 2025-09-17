@@ -1,8 +1,8 @@
 ---
-- name: Send file with creation sub directories
+- name: Send file to FTP with creation sub directories
   ansible.builtin.shell: >
     curl -T {{ storage_src }}
-    ftp://{{ storage_ftp.host }}:{{ storage_ftp.port }}{{ storage_ftp.root_dir }}/{{ storage_type }}/{{ storage_src | basename }}
+    ftp://{{ storage_ftp.host }}:{{ storage_ftp.port }}{{ storage_ftp.root_dir }}/{{ storage_type }}/{{ group_names[0] }}/{{ storage_src | basename }}
     --user {{ storage_ftp.username }}:{{ storage_ftp.password }}
     --ftp-create-dirs
   register: storage_ftp_result
@@ -14,7 +14,30 @@
     - not error|bool
   tags:
     - skip_ansible_lint
+
 - name: Send FTP output storage_ftp_result
   delegate_to: localhost
   ansible.builtin.debug:
     var: storage_ftp_result.stdout
+  when:
+    - storage_ftp.is_enabled|bool
+    - not error|bool
+
+- name: Check if local folder storage exists
+  ansible.builtin.file:
+    path: "{{ storage_folder.path }}/{{ storage_type }}/{{ group_names[0] }}"
+    state: directory
+    mode: '0755'
+  delegate_to: localhost
+  when:
+    - storage_folder.is_enabled|bool
+    - not error|bool
+
+- name: Copy file to local folder storage
+  delegate_to: localhost
+  ansible.builtin.copy:
+    src: "{{ storage_src }}"
+    dest: "{{ storage_folder.path }}/{{ storage_type }}/{{ group_names[0] }}/{{ storage_src | basename }}"
+  when:
+    - storage_folder.is_enabled|bool
+    - not error|bool
