@@ -4,5 +4,5 @@ storage_ftp:
   port: 21
   root_dir: /
 
-storage_folder: 
+storage_folder:
   is_enabled: true
