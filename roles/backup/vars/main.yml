@@ -1,6 +1,6 @@
 ---
 backup_ansible_connection:
-  network_cli_ssh_type: paramiko
+  network_cli_ssh_type: libssh
   network_os: routeros
   connection: network_cli
 

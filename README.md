@@ -111,7 +111,7 @@ ansible-playbook setup_control_host.yml --ask-become-pass
 
 Возможно 2 варианта запуска процесса шифрования файлов внутри каталога [group_vars/](group_vars/)
 
-- С использованием цели [Makefile](Makefile) `encrypt-group-vars`. Будет проверено наличие в корневом каталоге проекта файла `.vaultpass` (исключен в [.gitignore](.gitignore)), если файл отсутствует - запросит ввод пароля, запишет в файл `.vaultpass`, установит права 0600 и зашифрует все файлы внутри каталога [group_vars/](group_vars/), кроме [group_vars/sample.yml](group_vars/sample.yml). При этом будет проверен каждый файл и будут зашифрованы, только в случае, если не был зашифрован ранее.
+- С использованием цели [Makefile](Makefile) `encrypt-group-vars`. Будет проверено наличие в корневом каталоге проекта файла `.vault.pass` (исключен в [.gitignore](.gitignore)), если файл отсутствует - запросит ввод пароля, запишет в файл `.vault.pass`, установит права 0600 и зашифрует все файлы внутри каталога [group_vars/](group_vars/), кроме [group_vars/sample.yml](group_vars/sample.yml). При этом будет проверен каждый файл и будут зашифрованы, только в случае, если не был зашифрован ранее.
 
 ```shell
 make encrypt-group-vars
@@ -119,35 +119,35 @@ make encrypt-group-vars
 
 - С использованием набора команд shell
 
-Создать файл, который будет содержать ключ шифрования Ansible Vault. Например `.vaultpass` (исключен в [.gitignore](.gitignore))
+Создать файл, который будет содержать ключ шифрования Ansible Vault. Например `.vault.pass` (исключен в [.gitignore](.gitignore))
 
 ```shell
-echo "myverysecurestring" > .vaultpass
+echo "myverysecurestring" > .vault.pass
 ```
 
-Установить права 0600 на файл `.vaultpass`
+Установить права 0600 на файл `.vault.pass`
 
 
 ```shell
-chmod 600 .vaultpass
+chmod 600 .vault.pass
 ```
 
-Зашифровать файл внутри каталога [group_vars/](group_vars/) ключом шифрования, сохраненным в файле `.vaultpass`
+Зашифровать файл внутри каталога [group_vars/](group_vars/) ключом шифрования, сохраненным в файле `.vault.pass`
 
 ```shell
-ansible-vault encrypt group_vars/group_name --vault-password-file=.vaultpass
+ansible-vault encrypt group_vars/group_name --vault-password-file=.vault.pass
 ```
 
-При запуске с использование shell команд необходимо дополнительно передавать путь к файлу `.vaultpass` в значении параметра `--vault-password-file`: 
- `--vault-password-file=.vaultpass`
+При запуске с использование shell команд необходимо дополнительно передавать путь к файлу `.vault.pass` в значении параметра `--vault-password-file`: 
+ `--vault-password-file=.vault.pass`
 
 Пример
 ```shell
-ansible-playbook get_backup.yml -i inventory/inventory.yml -e type=export --vault-password-file=.vaultpass
+ansible-playbook get_backup.yml -i inventory/inventory.yml -e type=export --vault-password-file=.vault.pass
 ```
 
 ```shell
-ansible-playbook get_backup.yml -i inventory/inventory.yml -e type=backup --vault-password-file=.vaultpass
+ansible-playbook get_backup.yml -i inventory/inventory.yml -e type=backup --vault-password-file=.vault.pass
 ```
 
 ### Создание полной резервной копии

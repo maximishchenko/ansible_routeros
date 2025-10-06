@@ -10,3 +10,14 @@ ssh-add ~/.ssh/id_rsa
 ```shell
 ansible-galaxy install -r requirements.yml
 ```
+
+### Error: "'PlayContext' object has no attribute 'verbosity'"
+
+```
+ansible-galaxy collection list
+```
+
+```
+ansible-galaxy collection install community.routeros --upgrade
+
+```

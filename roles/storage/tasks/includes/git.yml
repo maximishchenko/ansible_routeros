@@ -1,5 +1,4 @@
 ---
-
 - name: Check git storage folder exists
   ansible.builtin.file:
     path: "{{ storage_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}"
@@ -64,24 +63,14 @@
   tags:
     - skip_ansible_lint
 
-- name: Check if origin remote exists
-  ansible.builtin.shell: >
-    git remote get-url origin
-  args:
-    chdir: "{{ storage_git.path }}/"
-  register: storage_git_url
-  delegate_to: localhost
-  tags:
-    - skip_ansible_lint
-
 - name: "Git add origin"
   ansible.builtin.shell: >
     git remote add origin {{ storage_git.repository_url }}
   args:
     chdir: "{{ storage_git.path }}/"
   delegate_to: localhost
+  failed_when: false
   when:
-    - storage_git_url is failed
     - storage_git.is_enabled|bool
     - storage_git.repository_url is defined
     - storage_type == 'export'
@@ -95,6 +84,7 @@
   args:
     chdir: "{{ storage_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}/"
   delegate_to: localhost
+  failed_when: false
   when:
     - storage_git.is_enabled|bool
     - storage_type == 'export'
@@ -104,10 +94,11 @@
 
 - name: "Git commit changes"
   ansible.builtin.shell: >
-    git commit -m "{{ storage_caption }} $(date +"%Y-%m-%d %H:%M:%S")"
+    git commit -m "{{ storage_git_src | basename }} {{ inventory_hostname }} $(date +"%Y-%m-%d %H:%M:%S")"
   args:
     chdir: "{{ storage_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}/"
   delegate_to: localhost
+  failed_when: false
   when:
     - storage_git.is_enabled|bool
     - storage_type == 'export'
@@ -121,6 +112,7 @@
   args:
     chdir: "{{ storage_git.path }}/"
   delegate_to: localhost
+  failed_when: false
   when:
     - storage_git.is_enabled|bool
     - storage_git.repository_url is defined
