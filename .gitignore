@@ -1,6 +1,6 @@
 out/
 
-.vaultpass
+.vault.pass
 
 inventory/*
 !inventory/inventory.sample.yml

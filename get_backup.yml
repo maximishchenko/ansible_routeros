@@ -13,6 +13,7 @@
     - role: storage
       storage_src: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
       storage_type: "{{ type }}"
+      storage_caption: "{{ backup_caption }}"
     - role: report
       report_attach: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
       report_caption: "{{ backup_caption }}"

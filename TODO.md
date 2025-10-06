@@ -1,11 +1,10 @@
-- [ ] Ansible Vault ID
 - [X] Linters and checkers
 - [X] Enable or disable backups sending to Telegram
 - [X] Send backups to email
 - [X] Backup to FTP
 - [ ] Backup to SFTP
 - [ ] Check Storage cleanup policy
-- [ ] Git repository for rsc export files. Only unencrypted
-- [ ] S3 Storage ???
+- [X] Git repository for rsc export files. Only unencrypted
+- [ ] S3 Storage
 - [ ] Dude DB backup
 - [ ] Userman DB Backup

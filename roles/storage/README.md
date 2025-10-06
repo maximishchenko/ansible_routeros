@@ -1,29 +1,30 @@
 Storage
 =========
 
-This playbook can send backup or export files from RouterOS devices to any storages.
-Supports:
-  - FTP
-  - Folder (can be local folder or mounted resource, such as SMB or NFS)
+Отвечает за хранение файлов резервных копий. Поддерживает следующие типы хранилищ:
+  - `Git репозиторий`
+  >  Вне зависимости от значения параметра шифрования GPG в репозиторий попадут только нешифрованные файлы экспорта конфигураций
+  - `FTP-сервер`
+  - `Локальный каталог`
+  > может быть как каталогом локальной файловой системы, так и примонтированным ресурсом, напимер SMB или NFS
 
 Requirements
 ------------
 
-This playbook require any installed packages on Ansible control host:
+Требует наличия следующих установленных пакетов на хосте управления Ansible:
 
-- curl
+- `curl`
+- `git`
 
-For initial setup you can use setup_control_host.yml playbook or run make target setup-control-host
+Для начальной настройки возможно использовать [setup_control_host.yml](setup_control_host.yml) или запустить ```make setup-control-host```
 
 Role Variables
 --------------
 
-All variables are commented inside group sample template file in group_vars/sample.yml
+Все используемые переменные прокомментированы в шаблоне [group_vars/sample.yml](group_vars/sample.yml)
 
 Example Playbook
 ----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
 ```
 - hosts: all

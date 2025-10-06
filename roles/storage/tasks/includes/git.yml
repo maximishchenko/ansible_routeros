@@ -1,0 +1,130 @@
+---
+
+- name: Check git storage folder exists
+  ansible.builtin.file:
+    path: "{{ storage_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}"
+    state: directory
+    mode: '0755'
+  delegate_to: localhost
+  when:
+    - storage_git.is_enabled|bool
+    - storage_type == 'export'
+    - not error|bool
+  tags:
+    - skip_ansible_lint
+
+- name: Get unencrypted export file name for git
+  ansible.builtin.set_fact:
+    storage_git_src: "{{ storage_src | regex_replace('.asc$', '') }}"
+  delegate_to: localhost
+  when:
+    - storage_git.is_enabled|bool
+    - storage_type == 'export'
+    - not error|bool
+  tags:
+    - skip_ansible_lint
+
+- name: Copy file to git folder storage
+  delegate_to: localhost
+  ansible.builtin.copy:
+    src: "{{ storage_git_src }}"
+    dest: "{{ storage_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}/{{ storage_git_src | basename }}"
+    mode: '0755'
+  when:
+    - storage_git.is_enabled|bool
+    - storage_type == 'export'
+    - not error|bool
+  tags:
+    - skip_ansible_lint
+
+- name: "Init git repository"
+  ansible.builtin.shell: >
+    test -d .git || git init
+  args:
+    chdir: "{{ storage_git.path }}/"
+  delegate_to: localhost
+  when:
+    - storage_git.is_enabled|bool
+    - storage_type == 'export'
+    - not error|bool
+  tags:
+    - skip_ansible_lint
+
+- name: "Git set branch"
+  ansible.builtin.shell: >
+    git branch -M {{ storage_git.branch | default('main') }}
+  args:
+    chdir: "{{ storage_git.path }}/"
+  delegate_to: localhost
+  register: storage_branch_rename_result
+  when:
+    - storage_git.is_enabled|bool
+    - storage_type == 'export'
+    - not error|bool
+  tags:
+    - skip_ansible_lint
+
+- name: Check if origin remote exists
+  ansible.builtin.shell: >
+    git remote get-url origin
+  args:
+    chdir: "{{ storage_git.path }}/"
+  register: storage_git_url
+  delegate_to: localhost
+  tags:
+    - skip_ansible_lint
+
+- name: "Git add origin"
+  ansible.builtin.shell: >
+    git remote add origin {{ storage_git.repository_url }}
+  args:
+    chdir: "{{ storage_git.path }}/"
+  delegate_to: localhost
+  when:
+    - storage_git_url is failed
+    - storage_git.is_enabled|bool
+    - storage_git.repository_url is defined
+    - storage_type == 'export'
+    - not error|bool
+  tags:
+    - skip_ansible_lint
+
+- name: "Git add to tracking"
+  ansible.builtin.shell: >
+    git add .
+  args:
+    chdir: "{{ storage_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}/"
+  delegate_to: localhost
+  when:
+    - storage_git.is_enabled|bool
+    - storage_type == 'export'
+    - not error|bool
+  tags:
+    - skip_ansible_lint
+
+- name: "Git commit changes"
+  ansible.builtin.shell: >
+    git commit -m "{{ storage_caption }} $(date +"%Y-%m-%d %H:%M:%S")"
+  args:
+    chdir: "{{ storage_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}/"
+  delegate_to: localhost
+  when:
+    - storage_git.is_enabled|bool
+    - storage_type == 'export'
+    - not error|bool
+  tags:
+    - skip_ansible_lint
+
+- name: "Git push changes"
+  ansible.builtin.shell: >
+    git push -u origin {{ storage_git.branch | default('main') }}
+  args:
+    chdir: "{{ storage_git.path }}/"
+  delegate_to: localhost
+  when:
+    - storage_git.is_enabled|bool
+    - storage_git.repository_url is defined
+    - storage_type == 'export'
+    - not error|bool
+  tags:
+    - skip_ansible_lint

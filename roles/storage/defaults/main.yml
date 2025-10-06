@@ -6,3 +6,7 @@ storage_ftp:
 
 storage_folder:
   is_enabled: true
+
+storage_git:
+  is_enabled: false
+  branch: main

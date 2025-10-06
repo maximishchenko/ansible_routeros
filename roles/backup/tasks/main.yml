@@ -18,11 +18,6 @@
       ansible.builtin.include_vars:
         file: vars/{{ backup_type }}.yml
 
-    - name: Get current datetime
-      ansible.builtin.set_fact:
-        backup_current_datetime: "{{ now(utc=false, fmt='%Y-%m-%d-%H-%M-%S') }}"
-      delegate_to: localhost
-
     - name: Get identity from RouterOS device
       community.routeros.command:
         commands: /system identity print
@@ -37,14 +32,14 @@
     - name: Generate tmp path
       ansible.builtin.set_fact:
         backup_tmp_path: >-
-          "{{ backup_common.tmp_dir }}/{{ backup_current_datetime }}-{{ backup_identity }}-{{ inventory_hostname }}.{{ backup_properties.extension }}"
+          "{{ backup_common.tmp_dir }}/{{ backup_identity }}.{{ backup_properties.extension }}"
       delegate_to: localhost
       tags:
         - skip_ansible_lint
 
     - name: Generate report caption
       ansible.builtin.set_fact:
-        backup_caption: "#{{ backup_type }} {{ backup_identity }}"
+        backup_caption: "#{{ backup_type }} #{{ backup_identity }} #{{ inventory_hostname }}"
       delegate_to: localhost
 
     - name: Create full binary backup dump on RouterOS Device
