@@ -1,5 +1,5 @@
-INVENTORY ?= inventory/inventory.yml
-VAULT_PASSWORD_FILE ?= .vaultpass
+INVENTORY ?= inventory/hosts.yml
+VAULT_PASSWORD_FILE ?= .vault.pass
 SHELL:=/bin/bash
 
 default: help
@@ -30,13 +30,13 @@ setup-control-host: # Prepare control host for environment. Ask sudo password
 
 .SILENT:
 .PHONY: create-inventory-file
-create-inventory-file: # Create inventory.yml file inside inventory directory from inventory.sample.yml template file
+create-inventory-file: # Create hosts.yml file inside inventory directory from inventory.sample.yml template file
 	if [ ! -f inventory/inventory.sample.yml ]; 
 		then
 		echo "Error: inventory template file not found"
 		exit 1
 	fi;
-	cp inventory/inventory.sample.yml inventory/inventory.yml
+	cp inventory/inventory.sample.yml inventory/hosts.yml
 
 .SILENT:
 .ONESHELL:

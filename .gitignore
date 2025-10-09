@@ -8,4 +8,8 @@ inventory/*
 group_vars/*
 !group_vars/sample.yml
 
+host_vars/*
+
 .ansible/
+
+logs/*

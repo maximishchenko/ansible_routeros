@@ -32,11 +32,11 @@ git clone git@github.com:maximishchenko/ansible_routeros.git
 
 > Для унификации процесса развертывания каждый шаг имеет цель в [Makefile](Makefile). Требует установки приложения make
 
-2. Скопировать файл инвентаризации из шаблона [inventory.sample.yml](inventory.sample.yml), например в файл с именем `inventory/inventory.yml`
+2. Скопировать файл инвентаризации из шаблона [inventory.sample.yml](inventory.sample.yml), например в файл с именем `inventory/hosts.yml`
 
 Возможно 2 варианта:
 
-- С использованием цели [Makefile](Makefile) `create-inventory-file`. Будет создан файл `inventory/inventory.yml` на базе шаблона [inventory.sample.yml](inventory.sample.yml) без учета комментариев
+- С использованием цели [Makefile](Makefile) `create-inventory-file`. Будет создан файл `inventory/hosts.yml` на базе шаблона [inventory.sample.yml](inventory.sample.yml) без учета комментариев
 
 ```shell
 make create-inventory-file
@@ -44,7 +44,7 @@ make create-inventory-file
 - С использованием команды shell
 
 ```shell
-cp inventory/inventory.sample.yml inventory/inventory.yml
+cp inventory/inventory.sample.yml inventory/hosts.yml
 ```
 3. Добавить адреса управляемых устройств в inventory-файл. Пример:
 
@@ -143,11 +143,11 @@ ansible-vault encrypt group_vars/group_name --vault-password-file=.vault.pass
 
 Пример
 ```shell
-ansible-playbook get_backup.yml -i inventory/inventory.yml -e type=export --vault-password-file=.vault.pass
+ansible-playbook get_backup.yml -i inventory/hosts.yml -e type=export --vault-password-file=.vault.pass
 ```
 
 ```shell
-ansible-playbook get_backup.yml -i inventory/inventory.yml -e type=backup --vault-password-file=.vault.pass
+ansible-playbook get_backup.yml -i inventory/hosts.yml -e type=backup --vault-password-file=.vault.pass
 ```
 
 ### Создание полной резервной копии
@@ -161,13 +161,13 @@ ansible-playbook get_backup.yml -i inventory/inventory.yml -e type=backup --vaul
 
 Возможно 2 варианта запуска процесса создания полной резервной копии.
 
-- С использованием цели [Makefile](Makefile) `backup`, необходимо передать переменную TYPE со значением, равным `backup`. При этом будет запущен плейбук `get_backup.yml` для inventory-файла `inventory/inventory.yml` и передано значение `backup` для extra-параметра `type`
+- С использованием цели [Makefile](Makefile) `backup`, необходимо передать переменную TYPE со значением, равным `backup`. При этом будет запущен плейбук `get_backup.yml` для inventory-файла `inventory/hosts.yml` и передано значение `backup` для extra-параметра `type`
 
 ```shell
 make backup TYPE=backup
 ```
 
-> В случае, если необходимо использовать inventory-файл, отличный от `inventory/inventory.yml`, необходимо дополнительно передать переменную `INVENTORY` со значением, равным пути к соответствующему файлу
+> В случае, если необходимо использовать inventory-файл, отличный от `inventory/hosts.yml`, необходимо дополнительно передать переменную `INVENTORY` со значением, равным пути к соответствующему файлу
 
 ```shell
 make backup TYPE=backup INVENTORY=inventory/inventory.custom.yml
@@ -176,7 +176,7 @@ make backup TYPE=backup INVENTORY=inventory/inventory.custom.yml
 - С использованием команды shell
 
 ```shell
-ansible-playbook -i inventory/inventory.yml get_backup.yml -e type=backup
+ansible-playbook -i inventory/hosts.yml get_backup.yml -e type=backup
 ```
 
 ### Экспорт конфигурации
@@ -187,12 +187,12 @@ ansible-playbook -i inventory/inventory.yml get_backup.yml -e type=backup
 
 Возможно 2 варианта запуска процесса создания полной резервной копии.
 
-- С использованием цели [Makefile](Makefile) `backup`, необходимо передать переменную TYPE со значением, равным `export`. При этом будет запущен плейбук `get_backup.yml` для inventory-файла `inventory/inventory.yml` и передано значение `export` для extra-параметра `type`
+- С использованием цели [Makefile](Makefile) `backup`, необходимо передать переменную TYPE со значением, равным `export`. При этом будет запущен плейбук `get_backup.yml` для inventory-файла `inventory/hosts.yml` и передано значение `export` для extra-параметра `type`
 
 ```shell
 make backup TYPE=export
 ```
-> В случае, если необходимо использовать inventory-файл, отличный от `inventory/inventory.yml`, необходимо дополнительно передать переменную `INVENTORY` со значением, равным пути к соответствующему файлу
+> В случае, если необходимо использовать inventory-файл, отличный от `inventory/hosts.yml`, необходимо дополнительно передать переменную `INVENTORY` со значением, равным пути к соответствующему файлу
 
 ```shell
 make backup TYPE=export INVENTORY=inventory/inventory.custom.yml
@@ -201,7 +201,7 @@ make backup TYPE=export INVENTORY=inventory/inventory.custom.yml
 - С использованием команды shell
 
 ```shell
-ansible-playbook -i inventory/inventory.yml get_backup.yml -e type=export
+ansible-playbook -i inventory/hosts.yml get_backup.yml -e type=export
 ```
 
 
