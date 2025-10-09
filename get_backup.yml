@@ -24,18 +24,18 @@
           storage_src: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
           storage_type: "{{ type }}"
           storage_caption: "{{ backup_caption }}"
+      - name: Report
+        include_role:
+          name: report
+        vars:
+          report_attach: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
+          report_caption: "{{ backup_caption }}"
+          report_type: "{{ type }}"
       rescue:
         - name: Report errors
           include_role:
             name: report
       always:
-        - name: Report
-          include_role:
-            name: report
-          vars:
-            report_attach: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
-            report_caption: "{{ backup_caption }}"
-            report_type: "{{ type }}"
         - name: Remove tmp file if exists
           file:
             path: "{{ backup_tmp_path | trim('\"') }}"
