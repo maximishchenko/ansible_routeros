@@ -1,0 +1,18 @@
+---
+- name: Send file to FTP with creation sub directories
+  ansible.builtin.shell: >
+    curl -T {{ transport_src }}
+    ftp://{{ transport_ftp.host }}:{{ transport_ftp.port }}{{ transport_ftp.root_dir }}/{{ transport_type }}/{{ group_names[0] }}/{{ transport_src | basename }}
+    --user {{ transport_ftp.username }}:{{ transport_ftp.password }}
+    --ftp-create-dirs
+  register: transport_ftp_result
+  changed_when: transport_ftp_result.rc == 0
+  failed_when: transport_ftp_result.rc != 0
+  delegate_to: localhost
+  tags:
+    - skip_ansible_lint
+
+- name: Send FTP output transport_ftp_result
+  delegate_to: localhost
+  ansible.builtin.debug:
+    var: transport_ftp_result.stdout

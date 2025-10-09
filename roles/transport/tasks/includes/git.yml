@@ -1,21 +1,21 @@
 ---
 - name: Check git storage folder exists
   ansible.builtin.file:
-    path: "{{ storage_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}"
+    path: "{{ transport_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}"
     state: directory
     mode: '0755'
   delegate_to: localhost
 
 - name: Get unencrypted export file name for git
   ansible.builtin.set_fact:
-    storage_git_src: "{{ storage_src | regex_replace('.asc$', '') }}"
+    transport_git_src: "{{ transport_src | regex_replace('.asc$', '') }}"
   delegate_to: localhost
 
 - name: Copy file to git folder storage
   delegate_to: localhost
   ansible.builtin.copy:
-    src: "{{ storage_git_src }}"
-    dest: "{{ storage_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}/{{ storage_git_src | basename }}"
+    src: "{{ transport_git_src }}"
+    dest: "{{ transport_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}/{{ transport_git_src | basename }}"
     mode: '0755'
     force: true
 
@@ -23,60 +23,60 @@
   ansible.builtin.shell: >
     test -d .git || git init
   args:
-    chdir: "{{ storage_git.path }}"
+    chdir: "{{ transport_git.path }}"
   delegate_to: localhost
 
 - name: "Git set branch"
   ansible.builtin.shell: >
-    git branch -M {{ storage_git.branch | default('main') }}
+    git branch -M {{ transport_git.branch | default('main') }}
   args:
-    chdir: "{{ storage_git.path }}"
+    chdir: "{{ transport_git.path }}"
   delegate_to: localhost
-  register: storage_branch_rename_result
+  register: transport_branch_rename_result
   failed_when: false
 
 - name: "Git add origin"
   ansible.builtin.shell: >
-    git remote add origin {{ storage_git.repository_url }}
+    git remote add origin {{ transport_git.repository_url }}
   args:
-    chdir: "{{ storage_git.path }}"
+    chdir: "{{ transport_git.path }}"
   delegate_to: localhost
   failed_when: false
   when:
-    - storage_git.repository_url is defined
+    - transport_git.repository_url is defined
 
 - name: "Git add to tracking"
   ansible.builtin.shell: >
     git add .
   args:
-    chdir: "{{ storage_git.path }}"
+    chdir: "{{ transport_git.path }}"
   delegate_to: localhost
   failed_when: false
 
 - name: Check if there are git changes
   ansible.builtin.shell: git diff --quiet HEAD
   args:
-    chdir: "{{ storage_git.path }}"
-  register: storage_git_diff
+    chdir: "{{ transport_git.path }}"
+  register: transport_git_diff
   delegate_to: localhost
   failed_when: false
   changed_when: false
 
 - name: "Git commit changes"
   ansible.builtin.shell: >
-    git commit -m "{{ storage_git_src | basename }} {{ inventory_hostname }} $(date +"%Y-%m-%d %H:%M:%S")"
+    git commit -m "{{ transport_git_src | basename }} {{ inventory_hostname }} $(date +"%Y-%m-%d %H:%M:%S")"
   args:
-    chdir: "{{ storage_git.path }}"
+    chdir: "{{ transport_git.path }}"
   delegate_to: localhost
   when:
-    - storage_git_diff.rc == 1
+    - transport_git_diff.rc == 1
 
 - name: "Git push changes"
   ansible.builtin.shell: >
-    git push -u origin {{ storage_git.branch | default('main') }}
+    git push -u origin {{ transport_git.branch | default('main') }}
   args:
-    chdir: "{{ storage_git.path }}"
+    chdir: "{{ transport_git.path }}"
   delegate_to: localhost
   when:
-    - storage_git.repository_url is defined
-    - storage_git_diff.rc == 1
+    - transport_git.repository_url is defined
+    - transport_git_diff.rc == 1

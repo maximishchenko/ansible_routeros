@@ -1,12 +1,12 @@
 ---
-storage_ftp:
+transport_ftp:
   is_enabled: false
   port: 21
   root_dir: /
 
-storage_folder:
+transport_folder:
   is_enabled: true
 
-storage_git:
+transport_git:
   is_enabled: false
   branch: main

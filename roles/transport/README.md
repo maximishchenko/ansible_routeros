@@ -1,7 +1,7 @@
-Storage
+Transport
 =========
 
-Отвечает за хранение файлов резервных копий. Поддерживает следующие типы хранилищ:
+Отвечает за транспорт файлов. Поддерживает следующие виды транспорта:
   - `Git репозиторий`
   >  Вне зависимости от значения параметра шифрования GPG в репозиторий попадут только нешифрованные файлы экспорта конфигураций
   - `FTP-сервер`
@@ -30,9 +30,9 @@ Example Playbook
 - hosts: all
   connection: network_cli
   roles:
-    - role: storage
-      storage_src: "/tmp/device.backup"
-      storage_type: "backup"
+    - role: transport
+      transport_src: "/tmp/device.backup"
+      transport_type: "backup"
 ```
 
 License

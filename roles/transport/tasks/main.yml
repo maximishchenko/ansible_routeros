@@ -1,0 +1,16 @@
+---
+- name: Transport FTP module
+  ansible.builtin.include_tasks: includes/ftp.yml
+  when:
+    - transport_ftp.is_enabled|bool
+
+- name: Transport Local folder module
+  ansible.builtin.include_tasks: includes/local-folder.yml
+  when:
+    - transport_folder.is_enabled|bool
+
+- name: Transport Git module
+  ansible.builtin.include_tasks: includes/git.yml
+  when:
+    - transport_git.is_enabled|bool
+    - transport_type == 'export'

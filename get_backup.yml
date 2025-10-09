@@ -17,13 +17,13 @@
           name: encryption
         vars:
           encryption_src: "{{ backup_tmp_path }}"
-      - name: Storage
+      - name: Transport
         include_role:
-          name: storage
+          name: transport
         vars:
-          storage_src: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
-          storage_type: "{{ type }}"
-          storage_caption: "{{ backup_caption }}"
+          transport_src: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
+          transport_type: "{{ type }}"
+          transport_caption: "{{ backup_caption }}"
       - name: Report
         include_role:
           name: report

@@ -18,11 +18,11 @@ report_email:
     - rcpt1@contoso.com
     - rcpt2@contoso.com
 
-storage_folder: 
-  is_enabled: true # Enable or disable local (can be mounted resources) folder storage
-  path: /mnt/fakepath/ # path local folder storage
+transport_folder: 
+  is_enabled: true # Enable or disable local (can be mounted resources) folder transport
+  path: /mnt/fakepath/ # path local folder
 
-storage_ftp:
+transport_ftp:
   is_enabled: true # Enable or disable sending backups to FTP server
   username: fake # FTP server username
   password: fakeapppassword # FTP server password
@@ -30,7 +30,7 @@ storage_ftp:
   port: 21 # FTP server port
   root_dir: / # FTP server folder
 
-storage_git: # only for unencrypted export files
+transport_git: # only for unencrypted export files
   is_enabled: false # Enable or disable sending backups to Git repository
   path: /tmp/git_fake_root_path/ # Local path to store Git repository data
   repository_url: 'https://username:personal_access_token@github.com/user/repo.git' # Git repository URL
