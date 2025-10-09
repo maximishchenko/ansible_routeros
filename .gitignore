@@ -2,11 +2,13 @@ out/
 
 .vault.pass
 
-inventory/*
-!inventory/inventory.sample.yml
+
+inventories/*
+!inventories/sample/
+!inventories/sample/hosts.yml
 
 group_vars/*
-!group_vars/sample.yml
+!group_vars/sample/hosts.yml
 
 host_vars/*
 
