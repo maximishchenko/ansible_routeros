@@ -9,8 +9,6 @@
   changed_when: storage_ftp_result.rc == 0
   failed_when: storage_ftp_result.rc != 0
   delegate_to: localhost
-  when:
-    - storage_ftp.is_enabled|bool
   tags:
     - skip_ansible_lint
 
@@ -18,5 +16,3 @@
   delegate_to: localhost
   ansible.builtin.debug:
     var: storage_ftp_result.stdout
-  when:
-    - storage_ftp.is_enabled|bool

@@ -5,8 +5,6 @@
     state: directory
     mode: '0755'
   delegate_to: localhost
-  when:
-    - storage_folder.is_enabled|bool
 
 - name: Copy file to local folder storage
   delegate_to: localhost
@@ -14,5 +12,3 @@
     src: "{{ storage_src }}"
     dest: "{{ storage_folder.path }}/{{ storage_type }}/{{ group_names[0] }}/{{ storage_src | basename }}"
     mode: '0755'
-  when:
-    - storage_folder.is_enabled|bool

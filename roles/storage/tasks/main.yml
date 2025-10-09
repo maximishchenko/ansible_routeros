@@ -2,9 +2,16 @@
 
 - name: Storage FTP module
   ansible.builtin.include_tasks: includes/ftp.yml
+  when:
+    - storage_ftp.is_enabled|bool
 
 - name: Storage Local folder module
   ansible.builtin.include_tasks: includes/local-folder.yml
+  when:
+    - storage_folder.is_enabled|bool
 
 - name: Storage Git module
   ansible.builtin.include_tasks: includes/git.yml
+  when:
+    - storage_git.is_enabled|bool
+    - storage_type == 'export'
