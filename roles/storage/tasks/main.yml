@@ -1,5 +1,4 @@
 ---
-
 - name: Storage FTP module
   ansible.builtin.include_tasks: includes/ftp.yml
   when:

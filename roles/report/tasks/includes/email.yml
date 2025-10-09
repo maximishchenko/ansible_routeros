@@ -1,0 +1,32 @@
+---
+- name: Send operation report to Email
+  community.general.mail:
+    host: "{{ report_email.host }}"
+    port: 587
+    username: "{{ report_email.username }}"
+    password: "{{ report_email.password }}"
+    from: "{{ report_email.smtp_from | default(report_email.username) }}"
+    to: "{{ report_email.recipient }}"
+    subject: "Operation successfull: {{ report_type }}"
+    body: "Operation successfull: {{ report_caption }}"
+    attach:
+      - "{{ report_attach }}"
+    secure: starttls
+  delegate_to: localhost
+  when:
+    - ansible_failed_result is not defined
+
+- name: Send errors result to Email
+  community.general.mail:
+    host: "{{ report_email.host }}"
+    port: 587
+    username: "{{ report_email.username }}"
+    password: "{{ report_email.password }}"
+    from: "{{ report_email.smtp_from | default(report_email.username) }}"
+    to: "{{ report_email.recipient }}"
+    subject: "Ошибка {{ inventory_hostname }}."
+    body: "{{ ansible_failed_result }}"
+    secure: starttls
+  delegate_to: localhost
+  when:
+    - ansible_failed_result is defined
