@@ -9,4 +9,5 @@ transport_folder:
 
 transport_git:
   is_enabled: false
+  remote_name: origin
   branch: main

@@ -1,0 +1,9 @@
+---
+- name: Git push changes
+  ansible.builtin.shell: >
+    git push -u {{ transport_git.remote_name | default('origin') }} {{ transport_git.branch | default('main') }}
+  args:
+    chdir: "{{ transport_git.path }}"
+  delegate_to: localhost
+  when:
+    - transport_git.repository_url is defined

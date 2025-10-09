@@ -60,12 +60,9 @@
     src: "{{ backup_identity }}.{{ backup_properties.extension }}"
     dest: "{{ backup_tmp_path }}"
     protocol: sftp
+  notify: Remove file from device
   when:
     - backup_tmp_path is defined
     - backup_tmp_path | length > 0
 
-- name: Remove file from device
-  community.routeros.command:
-    commands:
-      - /file remove {{ backup_identity }}.{{ backup_properties.extension }}
 

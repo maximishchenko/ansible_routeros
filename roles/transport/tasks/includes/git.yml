@@ -1,7 +1,7 @@
 ---
 - name: Check git storage folder exists
   ansible.builtin.file:
-    path: "{{ transport_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}"
+    path: "{{ transport_git.path }}"
     state: directory
     mode: '0755'
   delegate_to: localhost
@@ -15,7 +15,7 @@
   delegate_to: localhost
   ansible.builtin.copy:
     src: "{{ transport_git_src }}"
-    dest: "{{ transport_git.path }}/{{ group_names[0] }}/{{ inventory_hostname }}/{{ transport_git_src | basename }}"
+    dest: "{{ transport_git.path }}/{{ inventory_hostname }}-{{ transport_git_src | basename }}"
     mode: '0755'
     force: true
 
@@ -68,15 +68,6 @@
   args:
     chdir: "{{ transport_git.path }}"
   delegate_to: localhost
+  notify: Git push changes
   when:
-    - transport_git_diff.rc == 1
-
-- name: "Git push changes"
-  ansible.builtin.shell: >
-    git push -u origin {{ transport_git.branch | default('main') }}
-  args:
-    chdir: "{{ transport_git.path }}"
-  delegate_to: localhost
-  when:
-    - transport_git.repository_url is defined
     - transport_git_diff.rc == 1

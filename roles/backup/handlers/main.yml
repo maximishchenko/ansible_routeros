@@ -1,0 +1,5 @@
+---
+- name: Remove file from device
+  community.routeros.command:
+    commands:
+      - /file remove {{ backup_identity }}.{{ backup_properties.extension }}
