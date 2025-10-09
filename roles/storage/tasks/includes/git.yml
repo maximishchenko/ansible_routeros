@@ -8,7 +8,6 @@
   when:
     - storage_git.is_enabled|bool
     - storage_type == 'export'
-    - not error|bool
 
 - name: Get unencrypted export file name for git
   ansible.builtin.set_fact:
@@ -17,7 +16,6 @@
   when:
     - storage_git.is_enabled|bool
     - storage_type == 'export'
-    - not error|bool
 
 - name: Copy file to git folder storage
   delegate_to: localhost
@@ -29,7 +27,6 @@
   when:
     - storage_git.is_enabled|bool
     - storage_type == 'export'
-    - not error|bool
 
 - name: "Init git repository"
   ansible.builtin.shell: >
@@ -40,7 +37,6 @@
   when:
     - storage_git.is_enabled|bool
     - storage_type == 'export'
-    - not error|bool
 
 - name: "Git set branch"
   ansible.builtin.shell: >
@@ -53,7 +49,6 @@
   when:
     - storage_git.is_enabled|bool
     - storage_type == 'export'
-    - not error|bool
 
 - name: "Git add origin"
   ansible.builtin.shell: >
@@ -66,7 +61,6 @@
     - storage_git.is_enabled|bool
     - storage_git.repository_url is defined
     - storage_type == 'export'
-    - not error|bool
 
 - name: "Git add to tracking"
   ansible.builtin.shell: >
@@ -78,7 +72,6 @@
   when:
     - storage_git.is_enabled|bool
     - storage_type == 'export'
-    - not error|bool
 
 - name: "Git commit changes"
   ansible.builtin.shell: >
@@ -86,11 +79,9 @@
   args:
     chdir: "{{ storage_git.path }}"
   delegate_to: localhost
-  # failed_when: false
   when:
     - storage_git.is_enabled|bool
     - storage_type == 'export'
-    - not error|bool
 
 - name: "Git push changes"
   ansible.builtin.shell: >
@@ -98,9 +89,7 @@
   args:
     chdir: "{{ storage_git.path }}"
   delegate_to: localhost
-  # failed_when: false
   when:
     - storage_git.is_enabled|bool
     - storage_git.repository_url is defined
     - storage_type == 'export'
-    - not error|bool

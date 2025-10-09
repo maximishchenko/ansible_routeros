@@ -9,7 +9,7 @@
   delegate_to: localhost
   when:
     - report_telegram.is_enabled|bool
-    - not error|bool
+    - ansible_failed_result is not defined
   tags:
     - skip_ansible_lint
 
@@ -29,7 +29,7 @@
   delegate_to: localhost
   when:
     - report_email.is_enabled|bool
-    - not error|bool
+    - ansible_failed_result is not defined
 
 - name: Send errors result to Email
   community.general.mail:
@@ -39,13 +39,13 @@
     password: "{{ report_email.password }}"
     from: "{{ report_email.smtp_from | default(report_email.username) }}"
     to: "{{ report_email.recipient }}"
-    subject: "Error report."
-    body: "{{ report_error_msg }}"
+    subject: "Ошибка {{ inventory_hostname }}."
+    body: "{{ ansible_failed_result }}"
     secure: starttls
   delegate_to: localhost
   when:
     - report_email.is_enabled|bool
-    - error|bool
+    - ansible_failed_result is defined
 
 - name: Debug errors result to Telegram
   ansible.builtin.uri:
@@ -54,9 +54,9 @@
     body_format: json
     body:
       chat_id: "{{ report_telegram.chat_id }}"
-      text: "Ошибка: {{ report_error_msg }}"
+      text: "Ошибка {{ inventory_hostname }}: {{ ansible_failed_result }}"
       message_thread_id: "{{ report_telegram.message_thread_id | default(omit) }}"
   delegate_to: localhost
   when:
     - report_telegram.is_enabled|bool
-    - error|bool
+    - ansible_failed_result is defined

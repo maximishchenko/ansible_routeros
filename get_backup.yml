@@ -5,30 +5,48 @@
   gather_facts: false
   vars:
     error: false
-  roles:
-    - role: backup
-      backup_type: "{{ type }}"
-    - role: encryption
-      encryption_src: "{{ backup_tmp_path }}"
-    - role: storage
-      storage_src: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
-      storage_type: "{{ type }}"
-      storage_caption: "{{ backup_caption }}"
-    - role: report
-      report_attach: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
-      report_caption: "{{ backup_caption }}"
-      report_error_msg: "{{ backup_report_msg }}"
-      report_type: "{{ type }}"
   tasks:
-    - name: Remove tmp file if exists
-      ansible.builtin.command: rm -r "{{ backup_tmp_path }}"
-      args:
-        removes: "{{ backup_tmp_path }}"
-      delegate_to: localhost
-    - name: Remove encrypted tmp file if exists
-      ansible.builtin.command: rm -r "{{ backup_tmp_path }}.asc"
-      args:
-        removes: "{{ backup_tmp_path }}.asc"
-      delegate_to: localhost
-      when:
-        - encryption_common.is_enabled | bool
+    - block:
+      - name: Backup
+        include_role:
+          name: backup
+        vars:
+          backup_type: "{{ type }}"
+      - name: Encryption
+        include_role:
+          name: encryption
+        vars:
+          encryption_src: "{{ backup_tmp_path }}"
+      - name: Storage
+        include_role:
+          name: storage
+        vars:
+          storage_src: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
+          storage_type: "{{ type }}"
+          storage_caption: "{{ backup_caption }}"
+      rescue:
+        - name: Report errors
+          include_role:
+            name: report
+      always:
+        - name: Report
+          include_role:
+            name: report
+          vars:
+            report_attach: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
+            report_caption: "{{ backup_caption }}"
+            report_type: "{{ type }}"
+        - name: Remove tmp file if exists
+          file:
+            path: "{{ backup_tmp_path | trim('\"') }}"
+            state: absent
+          delegate_to: localhost
+          ignore_errors: true
+        - name: Remove encrypted tmp file if exists
+          file:
+            path: "{{ backup_tmp_path | trim('\"') }}.asc"
+            state: absent
+          delegate_to: localhost
+          ignore_errors: true
+          when:
+            - encryption_common.is_enabled | bool
