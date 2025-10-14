@@ -1,0 +1,19 @@
+---
+- name: Backup RouterOS Configuration
+  hosts: all
+  serial: 1
+  gather_facts: false
+  tasks:
+    - name: Upgrade
+      include_role:
+        name: upgrade
+      vars:
+        upgrade_type: "{{ type }}"
+    - name: Report
+      include_role:
+        name: report
+      vars:
+        report_message_text: "{{ upgrade_release_notes_message }}"
+    - name: p
+      debug:
+        msg: "{{ upgrade_release_notes_message }}"

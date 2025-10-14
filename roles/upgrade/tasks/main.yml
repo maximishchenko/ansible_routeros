@@ -1,0 +1,94 @@
+---
+- name: Execute upgrade procedure
+  set_fact:
+    ansible_network_cli_ssh_type: "{{ upgrade_ansible_connection.network_cli_ssh_type }}"
+    ansible_network_os: "{{ upgrade_ansible_connection.network_os }}"
+    ansible_connection: "{{ upgrade_ansible_connection.connection }}"
+
+- name: Validate type
+  ansible.builtin.assert:
+    that:
+      - upgrade_type in upgrade_common.types
+    fail_msg: "Invalid backup_type: {{ upgrade_type }}. Must be one of {{ upgrade_common.types }}."
+    success_msg: "Type {{ upgrade_type }} is valid."
+
+- name: Fetch RSS feed
+  uri:
+    url: "{{ upgrade_common.rss_url }}"
+    return_content: yes
+    status_code: 200
+  register: upgrade_rss_response
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Write RSS content to a temporary file (for xml module)
+  set_fact:
+    upgrade_xml_content: "{{ upgrade_rss_response.content }}"
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Get title from xml.
+  xml:
+    xmlstring: "{{ upgrade_xml_content }}"
+    content: "text"
+    xpath: "/rss/channel/item/title"
+  register: upgrade_xml_item_title
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Get link from xml.
+  xml:
+    xmlstring: "{{ upgrade_xml_content }}"
+    content: "text"
+    xpath: "/rss/channel/item/link"
+  register: upgrade_xml_item_link
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Get content from xml.
+  xml:
+    xmlstring: "{{ upgrade_xml_content }}"
+    content: "text"
+    xpath: "/rss/channel/item/content:encoded"
+    namespaces:
+      content: "{{ upgrade_common.content_encoded }}"
+  register: upgrade_xml_item_content
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Get title, link, and description from first item
+  set_fact:
+    upgrade_item_title: "I am title"
+    upgrade_item_link: "I am link"
+    upgrade_item_content: "I am changelog"
+    # upgrade_item_title: "{{ upgrade_xml_item_title.matches[0].title | default('N/A') }}"
+    # upgrade_item_link: "{{ upgrade_xml_item_link.matches[0].link | default('N/A') }}"
+    # TODO upgrade_common.content_encoded
+    # upgrade_item_content: "{{ upgrade_xml_item_content.matches[0]['{http://purl.org/rss/1.0/modules/content/}encoded'] | default('N/A') }}"
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+    
+- name: Process text with line breaks
+  set_fact:
+    processed_text: "{{ upgrade_item_content }}"
+    # processed_text: "{{ upgrade_item_content | replace('<br>', '\n> ') }}"
+    # processed_text: "{{ upgrade_item_content | replace('<br>', '\n') }}"
+
+- name: Upgrade Release Notes
+  set_fact:
+    upgrade_release_notes_message: "{{ upgrade_item_title ~ '\n\n' ~ processed_link ~ '\n\n> ' ~ processed_text ~ '\n\n' }}"
+    # upgrade_release_notes_message: "{{ upgrade_item_title ~ '\n\n> ' ~ upgrade_item_link ~ '\n\n> ' ~ processed_text ~ '\n\n' }}"
+  delegate_to: localhost
+  run_once: yes

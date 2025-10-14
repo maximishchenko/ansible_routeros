@@ -1,0 +1,11 @@
+---
+upgrade_ansible_connection:
+  network_cli_ssh_type: libssh
+  network_os: routeros
+  connection: network_cli
+
+upgrade_common:
+  types: ['check_last_release', 'firmware']
+  rss_url: "https://download.mikrotik.com/routeros/latest-stable.rss"
+  content_encoded: "http://purl.org/rss/1.0/modules/content/"
+  default_item_value: "N/A"

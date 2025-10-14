@@ -8,9 +8,37 @@
     -F caption="{{ report_caption }}"
   delegate_to: localhost
   when:
+    - report_attach is defined
     - ansible_failed_result is not defined
   tags:
     - skip_ansible_lint
+
+- name: Send text report to Telegram
+  ansible.builtin.uri:
+    url: "https://api.telegram.org/bot{{ report_telegram.bot_token }}/sendMessage"
+    method: POST
+    body_format: json
+    body:
+      chat_id: "{{ report_telegram.chat_id }}"
+      text: "{{ report_message_text }}"
+      parse_mode: "MarkdownV2"
+      message_thread_id: "{{ report_telegram.message_thread_id | default(omit) }}"
+  delegate_to: localhost
+  when:
+    - ansible_failed_result is not defined
+    - report_message_text is defined
+    
+# - name: Send text report to Telegram
+#   ansible.builtin.shell: >
+#     curl -s -X POST "https://api.telegram.org/bot{{ report_telegram.bot_token }}/sendMessage"
+#     -d "chat_id={{ report_telegram.chat_id }}"
+#     -d "message_thread_id={{ report_telegram.message_thread_id | default('') }}"
+#     -d "text={{ report_message_text }}"
+#     -d "parse_mode=MarkdownV2"
+#   delegate_to: localhost
+#   when:
+#     - ansible_failed_result is not defined
+#     - report_message_text is defined
 
 - name: Debug errors result to Telegram
   ansible.builtin.uri:
