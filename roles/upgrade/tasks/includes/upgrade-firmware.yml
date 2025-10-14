@@ -1,0 +1,36 @@
+---
+- name: Execute check firmware upgrade procedure
+  set_fact:
+    ansible_network_cli_ssh_type: libssh
+    ansible_network_os: routeros
+    ansible_connection: network_cli
+
+- name: Get RouterOS Current Firmware
+  community.routeros.command:
+    commands:
+      - >-
+        :put [ /system/routerboard/get current-firmware ]
+  register: current_firmware
+
+- name: Get RouterOS Upgrade Firmware
+  community.routeros.command:
+    commands:
+      - >-
+        :put [ /system/routerboard/get upgrade-firmware ]
+  register: upgrade_firmware
+
+- name: Compare versions
+  set_fact:
+    needs_update: "{{ current_firmware.stdout[0] != upgrade_firmware.stdout[0] }}"
+
+- name: Display RouterOS current_firmware
+  debug:
+    msg: "{{ needs_update }}"
+
+# - name: Display RouterOS current_firmware
+#   debug:
+#     msg: "RouterOS current_firmware on {{ inventory_hostname }} is {{ current_firmware.stdout[0] }}"
+
+# - name: Display RouterOS upgrade_firmware
+#   debug:
+#     msg: "RouterOS upgrade_firmware on {{ inventory_hostname }} is {{ upgrade_firmware.stdout[0] }}"

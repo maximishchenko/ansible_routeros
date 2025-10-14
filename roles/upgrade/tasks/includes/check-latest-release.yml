@@ -1,0 +1,75 @@
+---
+- name: Fetch RSS feed
+  uri:
+    url: "{{ upgrade_common.rss_url }}"
+    return_content: yes
+    status_code: 200
+  register: upgrade_rss_response
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Write RSS content to a temporary file (for xml module)
+  set_fact:
+    upgrade_xml_content: "{{ upgrade_rss_response.content }}"
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Get title from xml.
+  xml:
+    xmlstring: "{{ upgrade_xml_content }}"
+    content: "text"
+    xpath: "/rss/channel/item/title"
+  register: upgrade_xml_item_title
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Get content from xml.
+  xml:
+    xmlstring: "{{ upgrade_xml_content }}"
+    content: "text"
+    xpath: "/rss/channel/item/content:encoded"
+    namespaces:
+      content: "{{ upgrade_common.content_encoded }}"
+  register: upgrade_xml_item_content
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Get title, link, and description from first item
+  set_fact:
+    upgrade_item_title: "{{ upgrade_xml_item_title.matches[0].title | default('NA') }}"
+    upgrade_item_content: "{{ upgrade_xml_item_content.matches[0]['{' ~ upgrade_common.content_encoded ~ '}encoded'] }}"
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+    
+- name: Process text with line breaks
+  set_fact:
+    upgrade_title: "{{ '<b>' ~ upgrade_item_title ~ '</b>' }}"
+    upgrade_content: "{{ '\n\n' ~ upgrade_item_content | replace('<br>', '\n') ~ '\n\n'  }}"
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Upgrade Release Notes
+  set_fact:
+    upgrade_release_notes_message: >-
+      {{
+      '<blockquote expandable>' ~ 
+      upgrade_title ~ 
+      upgrade_content ~ 
+      '</blockquote>'
+      }}
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
