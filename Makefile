@@ -24,6 +24,18 @@ backup: # Create backup of RouterOS device. You must pass TYPE parameter value. 
 	fi
 
 .SILENT:
+.ONESHELL:
+.PHONY: upgrade
+upgrade: # Check last RouterOS version. You must pass TYPE parameter value. TYPE must be one of 'check_last_release', 'check_last_release'
+	if [ -z "$(TYPE)" ];
+	then
+		echo "Error: Missing TYPE argument."
+		exit 1
+	else
+		ansible-playbook -i $(INVENTORY) check_last_version.yml -e type=$(TYPE) --vault-password-file=$(VAULT_PASSWORD_FILE)
+	fi
+
+.SILENT:
 .PHONY: setup-control-host
 setup-control-host: # Prepare control host for environment. Ask sudo password
 	ansible-playbook setup_control_host.yml --ask-become-pass
