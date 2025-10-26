@@ -18,3 +18,4 @@
         report_html_message_text: "{{ upgrade_release_notes_message }}"
       when:
         - type == "check_last_release"
+        - upgrade_item_changed | bool
