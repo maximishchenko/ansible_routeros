@@ -16,6 +16,8 @@
         name: report
       vars:
         report_html_message_text: "{{ upgrade_release_notes_message }}"
+        report_type: "Upgrade Release Notes"
+        report_caption: "There is a new RouterOS release: {{ upgrade_item_title }}"
       when:
         - type == "check_last_release"
         - upgrade_item_changed | bool
