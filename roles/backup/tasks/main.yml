@@ -64,5 +64,3 @@
   when:
     - backup_tmp_path is defined
     - backup_tmp_path | length > 0
-
-

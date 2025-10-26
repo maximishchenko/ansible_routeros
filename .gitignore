@@ -16,3 +16,5 @@ host_vars/*
 
 logs/*
 .cache/
+# TMP
+roles/upgrade/tasks/includes/upgrade-firmware.yml
