@@ -22,7 +22,7 @@ Example Playbook
 
 ```
 - hosts: all
-  connection: network_cli
+  connection: ansible.netcommon.network_cli
   roles:
     - role: report
       attach: "{{ tmp_path }}"

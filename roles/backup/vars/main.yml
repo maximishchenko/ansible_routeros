@@ -2,7 +2,7 @@
 backup_ansible_connection:
   network_cli_ssh_type: libssh
   network_os: routeros
-  connection: network_cli
+  connection: ansible.netcommon.network_cli
 
 backup_common:
   tmp_dir: "/tmp"

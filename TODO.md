@@ -5,7 +5,7 @@
 - [ ] Backup to SFTP
 - [ ] Check Storage cleanup policy
 - [X] Git repository for rsc export files. Only unencrypted
-- [ ] Setup playbook install ansible_pylibssh
+- [X] Setup playbook install ansible_pylibssh
 - [ ] S3 Storage
 - [ ] Dude DB backup
 - [ ] Userman DB Backup

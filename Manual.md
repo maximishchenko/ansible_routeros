@@ -20,4 +20,7 @@ ansible-galaxy collection list
 ```
 ansible-galaxy collection install community.routeros --upgrade
 
+ansible-galaxy collection install ansible.netcommon --upgrade
+
+
 ```

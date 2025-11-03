@@ -8,7 +8,7 @@ Requirements
 
 This playbook require any installed packages on Ansible control host:
 
-- python3-paramiko
+- ansible-pylibssh
 
 For initial setup you can use setup_control_host.yml playbook or run make target setup-control-host
 
