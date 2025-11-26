@@ -8,8 +8,6 @@ group_vars/*
 host_vars/*
 
 .ansible/
-
-logs/*
 .cache/
 # TMP
 roles/upgrade/tasks/includes/upgrade-firmware.yml
