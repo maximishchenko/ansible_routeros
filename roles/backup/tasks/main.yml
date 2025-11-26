@@ -1,9 +1,9 @@
 ---
-- name: Execute backup procedure
-  set_fact:
-    ansible_network_cli_ssh_type: "{{ backup_ansible_connection.network_cli_ssh_type }}"
-    ansible_network_os: "{{ backup_ansible_connection.network_os }}"
-    ansible_connection: "{{ backup_ansible_connection.connection }}"
+# - name: Execute backup procedure
+#   set_fact:
+#     ansible_network_cli_ssh_type: "{{ backup_ansible_connection.network_cli_ssh_type }}"
+#     ansible_network_os: "{{ backup_ansible_connection.network_os }}"
+#     ansible_connection: "{{ backup_ansible_connection.connection }}"
 
 - name: Validate type
   ansible.builtin.assert:
