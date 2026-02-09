@@ -52,17 +52,32 @@
 - name: Create export on RouterOS Device
   community.routeros.command:
     commands:
-      - /export  {% if backup_export_config.is_sensitive %}show-sensitive terse{% endif %} file={{ backup_identity }}
+      - /export compact {% if backup_export_config.is_sensitive %}show-sensitive terse{% endif %} file={{ backup_identity }}
   when: backup_type == "export"
+
+- name: "Timeout after operation"
+  local_action: pause seconds=5
+  ignore_errors: yes
+
+- name: Ensure local file is removed before download
+  ansible.builtin.file:
+    path: "{{ backup_tmp_path }}"
+    state: absent
+  when:
+    - backup_tmp_path is defined
+    - backup_tmp_path | length > 0
 
 - name: Download tmp file
   ansible.netcommon.net_get:
     src: "{{ backup_identity }}.{{ backup_properties.extension }}"
     dest: "{{ backup_tmp_path }}"
-    protocol: sftp
+    protocol: scp
+    timeout: 300
   notify: Remove file from device
   when:
     - backup_tmp_path is defined
     - backup_tmp_path | length > 0
 
-
+- name: "Timeout after operation"
+  local_action: pause seconds=5
+  ignore_errors: yes

@@ -64,7 +64,7 @@
 
 - name: "Git commit changes"
   ansible.builtin.shell: >
-    git commit -m "{{ transport_git_src | basename }} {{ inventory_hostname }} $(date +"%Y-%m-%d %H:%M:%S")"
+    git commit --no-gpg-sign -m "{{ transport_git_src | basename }} {{ inventory_hostname }} $(date +"%Y-%m-%d %H:%M:%S")"
   args:
     chdir: "{{ transport_git.path }}"
   delegate_to: localhost
