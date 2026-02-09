@@ -9,5 +9,5 @@
 - [ ] S3 Storage
 - [ ] Dude DB backup
 - [ ] Userman DB Backup
-- [ ] Legacy mode parameter: export hide-sensitivity/show-sensitivity, ssh connection params ( -o PubkeyAcceptedAlgorithms=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa), routeros command style
+- [ ] Legacy mode parameter: export hide-sensitivity/show-sensitivity compact, ssh connection params ( -o PubkeyAcceptedAlgorithms=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa), routeros 6 command style
 - [ ] Doc device preparation
