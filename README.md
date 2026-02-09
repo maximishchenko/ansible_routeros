@@ -21,6 +21,55 @@
 
 > Активация или отключение любого способа хранения регулируется соответствующим параметром в файле конфигурации группы устройств (`group_vars`)
 
+### Подготовка устройств
+
+Для подготовки устройства необходимо выполнить следующие действия:
+
+1. Создать пользователя, задать пароль и назначить группу доступа
+
+```
+/user add name=ansible password=this_is_my_very_secure_strong_password group=full
+```
+
+2. Указать IP-адреса, с которых может подключаться пользователь
+
+```
+/user set ansible address=1.2.3.4,5.6.7.8
+```
+
+3. Загрузить публичную часть SSH-ключа на устройство и импортировать для пользователя
+
+```
+/user ssh-keys import user=ansible public-key-file=id_rsa.pub
+```
+
+4. Активировать сервис SSH
+
+```
+/ip service set ssh disabled=no port=22
+```
+
+5. Разрешить SSH-подключения только с доверенных IP-адресов
+
+```
+/ip service set ssh address=1.2.3.4,5.6.7.8
+```
+
+6. Добавить разрешающее правило в firewall, указать address-list хостов, имеющих доступ для подключения по SSH
+
+```
+/ip firewall address-list
+add list=ssh_allow address=1.2.3.4 comment="Mgmt network"
+add list=ssh_allow address=5.6.7.8 comment="Mgmt network"
+
+/ip firewall filter add chain=input protocol=tcp dst-port=22 src-address-list=ssh_allow action=accept comment="Allow SSH from ssh_allow" place-before=0
+```
+
+7. Включить строгое шифрование SSH
+
+```
+/ip ssh set strong-crypto=yes
+```
 
 ### Установка
 

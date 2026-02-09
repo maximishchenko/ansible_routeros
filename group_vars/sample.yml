@@ -2,6 +2,7 @@
 ansible_ssh_user: user_name # RouterOS username for ansible, required
 ansible_ssh_password: this_is_my_very_secure_password_with_full_rights # RouterOS password for ansible, required if ansible_ssh_private_key_file is not set
 ansible_ssh_private_key_file: ~/.ssh/id_ed25519 # SSH Key for device authentication, required if ansible_ssh_private_key_file is not set
+legacy_mode: false # is legacy mode enable for RouterOS 6 reverse compatibility support
 
 report_telegram:
   is_enabled: true # Enable or disable sending backups to Telegram
@@ -39,6 +40,9 @@ transport_git: # only for unencrypted export files
 
 backup_export_config:
   is_sensitive: false # Show/hide private information in export file, optional. Defualt - false
+  is_terse: true # With this parameter, the export command will output only configuration parameters, without defaults
+  is_verbose: false # With this parameter, the export command will output whole configuration parameters and items including defaults.
+  is_compact: true # Output only modified configuration, the default behavior
 
 backup_binary_dump:
   is_encrypted: true # Is binary backup encrypted, optional. Default - true
