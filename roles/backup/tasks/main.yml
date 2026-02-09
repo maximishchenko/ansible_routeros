@@ -1,10 +1,4 @@
 ---
-- name: Execute backup procedure
-  set_fact:
-    ansible_network_cli_ssh_type: "{{ backup_ansible_connection.network_cli_ssh_type }}"
-    ansible_network_os: "{{ backup_ansible_connection.network_os }}"
-    ansible_connection: "{{ backup_ansible_connection.connection }}"
-
 - name: Validate type
   ansible.builtin.assert:
     that:
@@ -55,9 +49,9 @@
       - /export compact {% if backup_export_config.is_sensitive %}show-sensitive terse{% endif %} file={{ backup_identity }}
   when: backup_type == "export"
 
-- name: "Timeout after operation"
-  local_action: pause seconds=5
-  ignore_errors: yes
+- name: Timeout after operation
+  ansible.builtin.pause:
+    seconds: 10
 
 - name: Ensure local file is removed before download
   ansible.builtin.file:
@@ -78,6 +72,6 @@
     - backup_tmp_path is defined
     - backup_tmp_path | length > 0
 
-- name: "Timeout after operation"
-  local_action: pause seconds=5
-  ignore_errors: yes
+- name: Timeout after operation
+  ansible.builtin.pause:
+    seconds: 10

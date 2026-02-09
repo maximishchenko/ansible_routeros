@@ -25,6 +25,8 @@
   args:
     chdir: "{{ transport_git.path }}"
   delegate_to: localhost
+  tags:
+    - skip_ansible_lint
 
 - name: "Git set branch"
   ansible.builtin.shell: >
@@ -34,6 +36,8 @@
   delegate_to: localhost
   register: transport_branch_rename_result
   failed_when: false
+  tags:
+    - skip_ansible_lint
 
 - name: "Git add origin"
   ansible.builtin.shell: >
@@ -44,6 +48,8 @@
   failed_when: false
   when:
     - transport_git.repository_url is defined
+  tags:
+    - skip_ansible_lint
 
 - name: "Git add to tracking"
   ansible.builtin.shell: >
@@ -52,6 +58,8 @@
     chdir: "{{ transport_git.path }}"
   delegate_to: localhost
   failed_when: false
+  tags:
+    - skip_ansible_lint
 
 - name: Check if there are git changes
   ansible.builtin.shell: git diff --quiet HEAD
@@ -61,6 +69,8 @@
   delegate_to: localhost
   failed_when: false
   changed_when: false
+  tags:
+    - skip_ansible_lint
 
 - name: "Git commit changes"
   ansible.builtin.shell: >
@@ -71,3 +81,5 @@
   notify: Git push changes
   when:
     - transport_git_diff.rc == 1
+  tags:
+    - skip_ansible_lint

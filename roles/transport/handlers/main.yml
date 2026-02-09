@@ -7,3 +7,5 @@
   delegate_to: localhost
   when:
     - transport_git.repository_url is defined
+  tags:
+    - skip_ansible_lint

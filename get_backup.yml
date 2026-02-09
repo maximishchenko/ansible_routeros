@@ -4,47 +4,51 @@
   serial: 1
   gather_facts: false
   tasks:
-    - block:
-      - name: Backup
-        include_role:
-          name: backup
-        vars:
-          backup_type: "{{ type }}"
-      - name: Encryption
-        include_role:
-          name: encryption
-        vars:
-          encryption_src: "{{ backup_tmp_path }}"
-      - name: Transport
-        include_role:
-          name: transport
-        vars:
-          transport_src: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
-          transport_type: "{{ type }}"
-          transport_caption: "{{ backup_caption }}"
-      - name: Report
-        include_role:
-          name: report
-        vars:
-          report_attach: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
-          report_caption: "{{ backup_caption }}"
-          report_type: "{{ type }}"
+    - name: Execute backup procedure
+      ansible.builtin.set_fact:
+        ansible_network_cli_ssh_type: libssh
+        ansible_network_os: routeros
+        ansible_connection: network_cli
+    - name: Run backup
+      block:
+        - name: Backup
+          ansible.builtin.include_role:
+            name: backup
+          vars:
+            backup_type: "{{ type }}"
+        - name: Encryption
+          ansible.builtin.include_role:
+            name: encryption
+          vars:
+            encryption_src: "{{ backup_tmp_path }}"
+        - name: Transport
+          ansible.builtin.include_role:
+            name: transport
+          vars:
+            transport_src: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
+            transport_type: "{{ type }}"
+            transport_caption: "{{ backup_caption }}"
+        - name: Report
+          ansible.builtin.include_role:
+            name: report
+          vars:
+            report_attach: "{{ backup_tmp_path | trim('\"') }}{{ '.asc' if encryption_common.is_enabled | bool else '' }}"
+            report_caption: "{{ backup_caption }}"
+            report_type: "{{ type }}"
       rescue:
         - name: Report handling errors
-          include_role:
+          ansible.builtin.include_role:
             name: report
       always:
         - name: Remove tmp file if exists
-          file:
+          ansible.builtin.file:
             path: "{{ backup_tmp_path | trim('\"') }}"
             state: absent
           delegate_to: localhost
-          ignore_errors: true
         - name: Remove encrypted tmp file if exists
-          file:
+          ansible.builtin.file:
             path: "{{ backup_tmp_path | trim('\"') }}.asc"
             state: absent
           delegate_to: localhost
-          ignore_errors: true
           when:
             - encryption_common.is_enabled | bool
