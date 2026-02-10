@@ -26,6 +26,7 @@
             name: backup
           vars:
             backup_type: "{{ type }}"
+            backup_legacy_mode: "{{ legacy_mode }}"
         - name: Encryption
           ansible.builtin.include_role:
             name: encryption

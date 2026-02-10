@@ -9,9 +9,9 @@
 - [ ] S3 Storage
 - [ ] Dude DB backup
 - [ ] Userman DB Backup
-- [ ] Legacy mode parameter: export hide-sensitivity/show-sensitivity
+- [X] Legacy mode parameter: export hide-sensitivity/show-sensitivity
 - [ ] Legacy mode parameter: export compact
 - [ ] Legacy mode parameter: export verbose
 - [ ] Legacy mode parameter: export terse
-- [ ] Legacy mode parameter: ssh connection params ( -o PubkeyAcceptedAlgorithms=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa)
+- [X] Legacy mode parameter: ssh connection params ( -o PubkeyAcceptedAlgorithms=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa)
 - [X] Doc device preparation

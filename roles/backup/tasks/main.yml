@@ -6,6 +6,11 @@
     fail_msg: "Invalid backup_type: {{ backup_type }}. Must be one of {{ backup_common.types }}."
     success_msg: "Type {{ backup_type }} is valid."
 
+- name: Get device mode
+  ansible.builtin.set_fact:
+    backup_legacy: "{{ backup_legacy_mode | default(False) }}"
+  delegate_to: localhost
+
 - name: Include variables
   ansible.builtin.include_vars:
     file: vars/{{ backup_type }}.yml
@@ -17,7 +22,14 @@
 
 - name: Get identity from string
   ansible.builtin.set_fact:
-    backup_identity: "{{ backup_src_identity.stdout_lines[0][0] | replace('name: ', '') }}"
+    backup_identity: >-
+      {{
+        (backup_src_identity.stdout_lines | default([]) | flatten
+          | select('search', '^\s*name:\s*')
+          | first | default('') )
+        | regex_replace('^\s*name:\s*', '')
+        | trim
+      }}
   when: backup_src_identity is defined and backup_src_identity | length > 0
   delegate_to: localhost
 
@@ -47,7 +59,13 @@
   community.routeros.command:
     commands:
       - /export compact {% if backup_export_config.is_sensitive %}show-sensitive terse{% endif %} file={{ backup_identity }}
-  when: backup_type == "export"
+  when: not backup_legacy and backup_type == "export"
+
+- name: Create export on legacy RouterOS Device
+  community.routeros.command:
+    commands:
+      - /export compact {% if not backup_export_config.is_sensitive %}hide-sensitive terse{% endif %} file={{ backup_identity }}
+  when: backup_legacy and backup_type == "export"
 
 - name: Timeout after operation
   ansible.builtin.pause:
