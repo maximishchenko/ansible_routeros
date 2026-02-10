@@ -18,9 +18,9 @@ backup: # Create backup of RouterOS device. You must pass TYPE parameter value. 
 	if [ -z "$(TYPE)" ];
 	then
 		echo "Error: Missing TYPE argument."
-		exit 1фт
+		exit 1
 	else
-		ansible-playbook -i $(INVENTORY) get_backup.yml -e backup_type=$(TYPE) --vault-password-file=$(VAULT_PASSWORD_FILE)
+		ansible-playbook -i $(INVENTORY) get_backup.yml -e type=$(TYPE) --vault-password-file=$(VAULT_PASSWORD_FILE)
 	fi
 
 .SILENT:
