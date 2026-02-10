@@ -1,6 +1,9 @@
 ---
 backup_export_config:
   is_sensitive: false
+  is_compact: false
+  is_terse: false
+  is_verbose: false
 
 backup_binary_dump:
   is_encrypted: true

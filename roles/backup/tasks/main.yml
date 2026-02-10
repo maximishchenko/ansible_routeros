@@ -58,13 +58,23 @@
 - name: Create export on RouterOS Device
   community.routeros.command:
     commands:
-      - /export compact {% if backup_export_config.is_sensitive %}show-sensitive terse{% endif %} file={{ backup_identity }}
+      - >-
+        /export
+        {% if backup_export_config.is_compact %} compact{% endif %}
+        {% if backup_export_config.is_sensitive %} show-sensitive{% endif %}
+        {% if backup_export_config.is_terse%} terse{% endif %}
+        {% if backup_export_config.is_verbose %} verbose{% endif %} file={{ backup_identity }}
   when: not backup_legacy and backup_type == "export"
 
 - name: Create export on legacy RouterOS Device
   community.routeros.command:
     commands:
-      - /export compact {% if not backup_export_config.is_sensitive %}hide-sensitive terse{% endif %} file={{ backup_identity }}
+      - >-
+        /export
+        {% if backup_export_config.is_compact %} compact{% endif %}
+        {% if not backup_export_config.is_sensitive %} hide-sensitive{% endif %}
+        {% if backup_export_config.is_terse%} terse{% endif %}
+        {% if backup_export_config.is_verbose %} verbose{% endif %} file={{ backup_identity }}
   when: backup_legacy and backup_type == "export"
 
 - name: Timeout after operation
