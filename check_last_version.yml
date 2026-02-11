@@ -1,5 +1,4 @@
 ---
-# TODO Email message format
 - name: Backup RouterOS Configuration
   hosts: all
   gather_facts: false
@@ -9,7 +8,6 @@
         name: upgrade
       vars:
         upgrade_type: "{{ type }}"
-    # Only for Check Last Release, for single notify
     - name: Report
       run_once: true
       include_role:
@@ -18,6 +16,8 @@
         report_html_message_text: "{{ upgrade_release_notes_message }}"
         report_type: "Upgrade Release Notes"
         report_caption: "There is a new RouterOS release: {{ upgrade_item_title }}"
+      loop: "{{ groups.keys() | reject('in', ['all', 'ungrouped']) | list }}"
       when:
         - type == "check_last_release"
         - upgrade_item_changed | bool
+        - (groups[item] | length) > 0
