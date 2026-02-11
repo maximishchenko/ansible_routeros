@@ -1,5 +1,5 @@
 ---
-- name: Send operation report to Email
+- name: Send operation report to Email with attachment
   community.general.mail:
     host: "{{ report_email.host }}"
     port: 587
@@ -11,6 +11,23 @@
     body: "Operation successfull: {{ report_caption }}"
     attach:
       - "{{ report_attach }}"
+    secure: starttls
+  delegate_to: localhost
+  when:
+    - ansible_failed_result is not defined
+    - report_attach is defined
+
+- name: Send operation report to Email
+  community.general.mail:
+    host: "{{ report_email.host }}"
+    port: 587
+    username: "{{ report_email.username }}"
+    password: "{{ report_email.password }}"
+    from: "{{ report_email.smtp_from | default(report_email.username) }}"
+    to: "{{ report_email.recipient }}"
+    subject: "Operation successfull: {{ report_type }}"
+    body: "Operation successfull: {{ report_caption }}.<br/> {{ report_html_message_text | replace('\n', '<br>') | default('') }}"
+    subtype: html
     secure: starttls
   delegate_to: localhost
   when:
