@@ -1,0 +1,129 @@
+---
+- name: Fetch RSS feed
+  uri:
+    url: "{{ upgrade_common.rss_url }}"
+    return_content: yes
+    status_code: 200
+  register: upgrade_rss_response
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Write RSS content to a temporary file (for xml module)
+  set_fact:
+    upgrade_xml_content: "{{ upgrade_rss_response.content }}"
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Get title from xml.
+  xml:
+    xmlstring: "{{ upgrade_xml_content }}"
+    content: "text"
+    xpath: "/rss/channel/item/title"
+  register: upgrade_xml_item_title
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Get content from xml.
+  xml:
+    xmlstring: "{{ upgrade_xml_content }}"
+    content: "text"
+    xpath: "/rss/channel/item/content:encoded"
+    namespaces:
+      content: "{{ upgrade_common.content_encoded }}"
+  register: upgrade_xml_item_content
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Get title, link, and description from first item
+  set_fact:
+    upgrade_item_title: "{{ upgrade_xml_item_title.matches[0].title | default('NA') }}"
+    upgrade_item_content: "{{ upgrade_xml_item_content.matches[0]['{' ~ upgrade_common.content_encoded ~ '}encoded'] }}"
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Check if state file exists
+  ansible.builtin.stat:
+    path: "{{ playbook_dir }}/.cache/upgrade_last.yml"
+  register: upgrade_state_stat
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Load previous upgrade title if present (namespace - prev_upgrade)
+  ansible.builtin.include_vars:
+    file: "{{ playbook_dir }}/.cache/upgrade_last.yml"
+    name: prev_upgrade
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+    - upgrade_state_stat.stat.exists
+
+- name: Ensure cache dir exists
+  ansible.builtin.file:
+    path: "{{ playbook_dir }}/.cache"
+    state: directory
+    mode: '0755'
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Determine whether upgrade title changed
+  ansible.builtin.set_fact:
+    upgrade_item_changed: "{{ (prev_upgrade.upgrade_item_title is not defined) or (upgrade_item_title != prev_upgrade.upgrade_item_title) }}"
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Save latest upgrade title for future runs
+  ansible.builtin.copy:
+    dest: "{{ playbook_dir }}/.cache/upgrade_last.yml"
+    content: "{{ {'upgrade_item_title': upgrade_item_title | default('') } | to_nice_yaml }}"
+    mode: '0644'
+  delegate_to: localhost
+  run_once: yes
+  when: upgrade_item_changed | bool
+
+- name: Dump upgrade_item_changed
+  debug:
+    var: upgrade_item_changed
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+    
+- name: Process text with line breaks
+  set_fact:
+    upgrade_title: "{{ '<b>' ~ upgrade_item_title ~ '</b>' }}"
+    upgrade_content: "{{ '\n\n' ~ upgrade_item_content | replace('<br>', '\n') ~ '\n\n'  }}"
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"
+
+- name: Upgrade Release Notes
+  set_fact:
+    upgrade_release_notes_message: >-
+      {{
+      '<blockquote expandable>' ~ 
+      upgrade_title ~ 
+      upgrade_content ~ 
+      '</blockquote>'
+      }}
+  delegate_to: localhost
+  run_once: yes
+  when:
+    - upgrade_type == "check_last_release"

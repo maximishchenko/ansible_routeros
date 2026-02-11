@@ -1,0 +1,12 @@
+---
+- name: Validate type
+  ansible.builtin.assert:
+    that:
+      - upgrade_type in upgrade_common.types
+    fail_msg: "Invalid backup_type: {{ upgrade_type }}. Must be one of {{ upgrade_common.types }}."
+    success_msg: "Type {{ upgrade_type }} is valid."
+
+- name: Check Lastest Release
+  ansible.builtin.include_tasks: includes/check-latest-release.yml
+  when:
+    - upgrade_type == "check_last_release"
