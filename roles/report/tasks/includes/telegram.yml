@@ -8,9 +8,27 @@
     -F caption="{{ report_caption }}"
   delegate_to: localhost
   when:
+    - report_attach is defined
     - ansible_failed_result is not defined
   tags:
     - skip_ansible_lint
+
+- name: Send text report to Telegram in HTML format
+  ansible.builtin.uri:
+    url: "https://api.telegram.org/bot{{ report_telegram.bot_token }}/sendMessage"
+    method: POST
+    body_format: json
+    body:
+      chat_id: "{{ report_telegram.chat_id }}"
+      text: "{{ report_html_message_text }}"
+      parse_mode: "HTML"
+      disable_web_page_preview: true
+      message_thread_id: "{{ report_telegram.message_thread_id | default(omit) }}"
+  delegate_to: localhost
+  when:
+    - ansible_failed_result is not defined
+    - report_html_message_text is defined
+
 
 - name: Debug errors result to Telegram
   ansible.builtin.uri:
