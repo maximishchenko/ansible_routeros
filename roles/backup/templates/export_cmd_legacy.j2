@@ -1,0 +1,4 @@
+/export{{ ' compact' if backup_export_config.is_compact else '' -}}
+{{ ' hide-sensitive' if not backup_export_config.is_sensitive else '' -}}
+{{ ' terse' if backup_export_config.is_terse else '' -}}
+{{ ' verbose' if backup_export_config.is_verbose else '' }} file={{ backup_identity }}

@@ -1,0 +1,3 @@
+/system backup save{{ ' dont-encrypt=yes' if (not backup_binary_dump.is_encrypted and backup_binary_dump.password is not defined) else '' -}}
+{{ ' password=' ~ backup_binary_dump.password if (backup_binary_dump.password is defined) else '' }} name={{ backup_identity }}
+

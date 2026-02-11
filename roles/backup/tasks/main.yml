@@ -49,32 +49,19 @@
 - name: Create full binary backup dump on RouterOS Device
   community.routeros.command:
     commands:
-      - >-
-        /system backup save
-        {% if not backup_binary_dump.is_encrypted and backup_binary_dump.password is not defined %} dont-encrypt=yes {% endif %}
-        {% if backup_binary_dump.password is defined %} password={{ backup_binary_dump.password }} {% endif %} name={{ backup_identity }}
+      - "{{ lookup('template', 'backup_cmd.j2') | trim }}"
   when: backup_type == "backup"
 
 - name: Create export on RouterOS Device
   community.routeros.command:
     commands:
-      - >-
-        /export
-        {% if backup_export_config.is_compact %} compact{% endif %}
-        {% if backup_export_config.is_sensitive %} show-sensitive{% endif %}
-        {% if backup_export_config.is_terse%} terse{% endif %}
-        {% if backup_export_config.is_verbose %} verbose{% endif %} file={{ backup_identity }}
+      - "{{ lookup('template', 'export_cmd.j2') | trim }}"
   when: not backup_legacy and backup_type == "export"
 
 - name: Create export on legacy RouterOS Device
   community.routeros.command:
     commands:
-      - >-
-        /export
-        {% if backup_export_config.is_compact %} compact{% endif %}
-        {% if not backup_export_config.is_sensitive %} hide-sensitive{% endif %}
-        {% if backup_export_config.is_terse%} terse{% endif %}
-        {% if backup_export_config.is_verbose %} verbose{% endif %} file={{ backup_identity }}
+      - "{{ lookup('template', 'export_cmd_legacy.j2') | trim }}"
   when: backup_legacy and backup_type == "export"
 
 - name: Timeout after operation

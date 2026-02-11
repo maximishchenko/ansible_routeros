@@ -9,5 +9,8 @@
 - [ ] S3 Storage
 - [ ] Dude DB backup
 - [ ] Userman DB Backup
+- [X] Check latest update changelog
+- [ ] Doc changelog
+- [X] Jinja templates
 - [X] Legacy mode parameter: ssh connection params ( -o PubkeyAcceptedAlgorithms=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa) and script syntax
 - [X] Doc device preparation
